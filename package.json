@@ -1,0 +1,19 @@
+{
+  "name": "puppeteer",
+  "version": "1.0.0",
+  "description": "yys",
+  "main": "index.js",
+  "dependencies": {
+    "puppeteer": "latest"
+  },
+  "devDependencies": {
+  },
+  "scripts": {
+    "run": "node index.js"
+  },
+  "keywords": [
+    "yyds"
+  ],
+  "author": "choco",
+  "license": "ISC"
+}
