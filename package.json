@@ -6,8 +6,7 @@
   "dependencies": {
     "puppeteer": "latest"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "scripts": {
     "run": "node index.js"
   },
