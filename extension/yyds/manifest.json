@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "YYDS",
-	"version": "1.0",
+	"version": "1.0.1",
 	"description": "yys tools by choco",
 	"author": "CHOCO",
 	"icons":
@@ -17,8 +17,8 @@
 	"content_scripts":
 	[
 		{
-			"matches": ["*://*/*", "https://www.baidu.com/*", "http://leo.local:9527/*"],
-			"js": ["js/jquery.js","js/event.js", "js/content-script.js"]
+			"matches": ["https://www.bilibili.com/*", "*://aso.abteb.top/*"],
+			"js": ["js/jquery.js","js/helper.js", "js/content-script.js"]
 		}
 	],
 	"web_accessible_resources": ["js/inject.js"],
