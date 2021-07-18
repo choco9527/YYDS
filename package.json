@@ -4,7 +4,9 @@
   "description": "yys",
   "main": "index.js",
   "dependencies": {
-    "puppeteer": "latest"
+    "puppeteer": "latest",
+    "puppeteer-extra": "^3.1.18",
+    "puppeteer-extra-plugin-open-site-flash": "^1.0.0"
   },
   "devDependencies": {},
   "scripts": {
