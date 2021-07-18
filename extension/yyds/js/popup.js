@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    // $('.slide-close').trigger('click')
     $('.tab1').click((e) => {
         // $notify('标题', '监听点击')
         $sendMessageToContentScript({cmd: 'tab1', value: '你好，我是popup！'}, (response) => {

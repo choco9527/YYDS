@@ -1,4 +1,17 @@
 ﻿$(document).ready(function () {
+    const timeout = 1000, closeSlide = setInterval(() => {
+        $('.slide-close').trigger('click')
+        $('h2.f14').each(function (i, ele) {
+            if (ele.innerText === '阴阳师（ios+安卓）') {
+                const playEl = $(this).parent().next()
+                playEl.trigger('click')
+                clearInterval(closeSlide)
+                return false
+            }
+        });
+    }, timeout)
+    setTimeout(_ => clearInterval(closeSlide), 10 * timeout)
+
     chrome.runtime.onMessage.addListener((res, sender, sendResponse) => { // 接受消息
         if (res.code === 'yyds') {
             const {cmd} = res
