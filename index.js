@@ -26,7 +26,7 @@ const {getPath, mockClick} = require('./js/tools');
                 'https://www.bilibili.com/video/BV13Z4y137Kt?from=search&seid=14938727801566765673',
                 'https://aso.youmi.net',
                 'https://cg.163.com/#/mobile']
-            const url = urls[1]
+            const url = urls[3]
             await page.goto(url);
 
             setInterval(async ()=>{ // 模拟点击

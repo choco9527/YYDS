@@ -28,7 +28,7 @@ async function mockClick({page = null, x = 0, y = 0}) { // a new click loop
         // create loopClick
         if (loopClickTimes < 1 ) return
         let times = randomNumber(1,loopClickTimes), timing = 0
-        const dispatchTimeClick = async (x = 0, y = 0,frequency = randomNumber(333, 666)) => { // create a frequency click
+        const dispatchTimeClick = async (x = 0, y = 0,frequency = randomNumber(222, 666)) => { // create a frequency click
             return new Promise(resolve => {
                 const t = setTimeout(async () => {
                     await click()
