@@ -28,7 +28,7 @@
                 setInterval(() => {
                     $canvas.freshCanvas()
                     $canvas.drawVideoImg()
-                }, 0)
+                }, 10)
             }
         }
         sendResponse('ok')
