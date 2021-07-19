@@ -23,10 +23,10 @@ const {getPath, mockClick} = require('./js/tools');
 
             const urls = ['https://cg.163.com/#/search?key=%E9%98%B4%E9%98%B3%E5%B8%88',
                 'https://www.baidu.com/',
-                'https://www.bilibili.com/video/BV13Z4y137Kt?from=search&seid=14938727801566765673',
+                'https://www.bilibili.com/bangumi/play/ss1733?from=search&seid=8552725814323946562',
                 'https://aso.youmi.net',
                 'https://cg.163.com/#/mobile']
-            const url = urls[3]
+            const url = urls[2]
             await page.goto(url);
 
             // setInterval(async ()=>{ // 模拟点击
