@@ -1,3 +1,4 @@
-1. npm -i 安装依赖
-2. .env文件中配置 Chrome浏览器地址（文件位置："C:\Program Files\Google\Chrome\Application\chrome.exe"）
+1. 安装nodejs https://nodejs.org/zh-cn/
+2. npm -i 安装依赖
+3. .env文件中配置电脑中Chrome浏览器地址（CHROME_PATH = "C:\Program Files\Google\Chrome\Application\chrome.exe"）
 
