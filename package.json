@@ -4,6 +4,7 @@
   "description": "yys",
   "main": "index.js",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "puppeteer-core": "latest"
   },
   "devDependencies": {},
