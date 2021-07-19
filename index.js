@@ -1,4 +1,6 @@
 const puppeteer = require('puppeteer-core');
+const dotenv = require("dotenv")
+dotenv.config()
 const {getPath, mockClick} = require('./js/tools');
 
 (async () => {
@@ -6,14 +8,14 @@ const {getPath, mockClick} = require('./js/tools');
         await openIt() // 打开页面
 
         async function openIt() {
-            console.log('正在启动 Chromium')
+            console.log('正在启动 Chrome')
             const extendUrl = 'extension/yyds'
             const options = {
                 headless: false,
                 args: [`--disable-extensions-except=${getPath(extendUrl)}`, "--window-position=0,0"],
                 defaultViewport: null,
                 devtools: true,
-                executablePath: 'C:\\Users\\CHOCO\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe'
+                executablePath: process.env.CHROME_PATH
             }
             const browser = await puppeteer.launch(options);
 
@@ -23,7 +25,7 @@ const {getPath, mockClick} = require('./js/tools');
                 'https://www.bilibili.com/video/BV13Z4y137Kt?from=search&seid=14938727801566765673',
                 'https://aso.youmi.net',
                 'https://cg.163.com/#/mobile']
-            const url = urls[0]
+            const url = urls[2]
             await page.goto(url);
 
             setInterval(async ()=>{ // 模拟点击

@@ -1,5 +1,3 @@
-1. 下载 puppeteer
-    npm install --save puppeteer
-   
-https://zhaoqize.github.io/puppeteer-api-zh_CN/#?product=Puppeteer&version=v10.1.0&show=api-class-puppeteer
+1. npm -i 安装依赖
+2. .env文件中配置 Chrome浏览器地址（文件位置："C:\Program Files\Google\Chrome\Application\chrome.exe"）
 

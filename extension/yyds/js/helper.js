@@ -26,7 +26,8 @@ class MyEvent {
             backgroundColor: 'red',
             position: 'fixed',
             opacity: 0,
-            transition: 'opacity 0.2s ease-in-out'
+            transition: 'opacity 0.2s ease-in-out',
+            zIndex: 20217777
         })
         bodyEl.append(this.showPoint)
     }
