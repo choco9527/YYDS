@@ -82,10 +82,10 @@ class HandleCanvas {
             this.videoEle = document.querySelector(this.selector ? this.selector : 'video')
             return
         }
-        // if (this.videoEle.paused) {
-            // this.videoEle.muted = true
-            // this.videoEle.play()
-        // }
+        if (this.videoEle.paused) {
+            this.videoEle.muted = true
+            this.videoEle.play()
+        }
 
         if (!this.canvasEle) {
             this.initCanvas()
@@ -111,7 +111,7 @@ class HandleCanvas {
                 data[i + 2] = avg; // blue
                 arr.push(avg)
             }
-            const arr2d = []
+            const arr2d = [] // 处理成二维数组
             for (let i=0;i<this.canvasEle.height;i++) {
                 const a = arr.slice(i*this.canvasEle.width,(i+1)*this.canvasEle.width)
                 arr2d.push(a)
