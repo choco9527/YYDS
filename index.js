@@ -29,9 +29,9 @@ const {getPath, mockClick} = require('./js/tools');
             const url = urls[3]
             await page.goto(url);
 
-            setInterval(async ()=>{ // 模拟点击
-                await mockClick({page,x:80, y:80})
-            },3000)
+            // setInterval(async ()=>{ // 模拟点击
+            //     await mockClick({page,x:80, y:80})
+            // },3000)
         }
 
         // await browser.close();

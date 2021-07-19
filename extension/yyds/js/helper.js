@@ -5,15 +5,6 @@ class MyEvent {
         this.initPoint()
     }
 
-    patchEvent(X = 0, Y = 0) {
-        const ev = document.createEvent('HTMLEvents');
-        ev.clientX = X
-        ev.clientY = Y
-        ev.initEvent('click', false, true);
-        const res = this.el.dispatchEvent(ev)
-        console.log(res);
-    }
-
     initPoint() { // 初始化小圆点
         this.showPoint = this.$('<p class="show-point"/>')
         const bodyEl = this.$('body')
@@ -106,8 +97,19 @@ class HandleCanvas {
     drawVideoImg() {
         // 获取当前视频画面
         if (this.videoEle && this.canvasEle) {
-            console.log('draw')
-            this.canvasEle.getContext('2d').drawImage(this.videoEle, 0, 0, this.canvasEle.width, this.canvasEle.height)
+            // console.log('draw')
+            const ctx = this.canvasEle.getContext('2d')
+            ctx.drawImage(this.videoEle, 0, 0, this.canvasEle.width, this.canvasEle.height)
+            let frame = ctx.getImageData(0, 0, this.canvasEle.width, this.canvasEle.height);
+            const data = frame.data
+            const l = data.length;
+            for (let i = 0; i < l; i += 4) {
+                data[i] = 255 - data[i]; // red
+                data[i + 1] = 255 - data[i + 1]; // green
+                data[i + 2] = 255 - data[i + 2]; // blue
+            }
+            ctx.putImageData(frame, 0, 0);
+            // console.log(frame);
         }
     }
 }
