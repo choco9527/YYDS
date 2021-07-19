@@ -1,6 +1,5 @@
-const puppeteer = require('puppeteer-extra')
-puppeteer.use(require('puppeteer-extra-plugin-open-site-flash')())
-const {getPath, randomFrom} = require('./js/tools');
+const puppeteer = require('puppeteer-core');
+const {getPath, mockClick} = require('./js/tools');
 
 (async () => {
     try {
@@ -11,32 +10,26 @@ const {getPath, randomFrom} = require('./js/tools');
             const extendUrl = 'extension/yyds'
             const options = {
                 headless: false,
-                args: [
-                    `--disable-extensions-except=${getPath(extendUrl)}`,
-                    "--window-position=0,0"
-                ]
+                args: [`--disable-extensions-except=${getPath(extendUrl)}`, "--window-position=0,0"],
+                defaultViewport: null,
+                devtools: true,
+                executablePath: 'C:\\Users\\CHOCO\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe'
             }
             const browser = await puppeteer.launch(options);
 
             const page = await browser.newPage();
 
-            const urls = ['https://www.bilibili.com/video/BV13Z4y137Kt?from=search&seid=14938727801566765673',
-                'https://aso.youmi.net', 'https://cg.163.com/#/mobile']
+            const urls = ['https://cg.163.com/#/search?key=%E9%98%B4%E9%98%B3%E5%B8%88',
+                'https://www.bilibili.com/video/BV13Z4y137Kt?from=search&seid=14938727801566765673',
+                'https://aso.youmi.net',
+                'https://cg.163.com/#/mobile']
             const url = urls[0]
-            // await browser.flash('https://www.bilibili.com') // open flash
-
             await page.goto(url);
 
-            const dimensions = await page.evaluate(() => {
-                return {
-                    width: document.querySelector('body').clientWidth,
-                    height: document.querySelector('body').clientHeight,
-                };
-            });
-            const {width, height} = dimensions
-            await page.setViewport({width, height})
+            setInterval(async ()=>{ // 模拟点击
+                await mockClick({page:page,x:55, y:55})
+            },3000)
         }
-
 
         // await browser.close();
     } catch (e) {

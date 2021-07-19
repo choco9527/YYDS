@@ -17,7 +17,7 @@
 	"content_scripts":
 	[
 		{
-			"matches": ["https://www.bilibili.com/*", "*://aso.abteb.top/*"],
+			"matches": ["*://*/*"],
 			"js": ["js/jquery.js","js/helper.js", "js/content-script.js"]
 		}
 	],
