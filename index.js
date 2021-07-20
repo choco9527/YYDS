@@ -49,15 +49,29 @@ const {getPath, mockClick} = require('./js/tools');
         }
 
         async function compareImg(data) {
-            const {width, height} = data
             const canvasData = await page.evaluate(() => {
                 const canvasEle = document.getElementById('yyds-canvas')
                 const ctx = canvasEle.getContext('2d')
-                let frame = ctx.getImageData(0, 0, width, height);
+                let frame = ctx.getImageData(0, 0, canvasEle.width, canvasEle.height);
                 const data = frame.data
-                return Promise.resolve(data[0])
+                const l = data.length;
+                const arr = []
+                for (let i = 0; i < l; i += 4) {
+                    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                    data[i] = avg; // red
+                    data[i + 1] = avg; // green
+                    data[i + 2] = avg; // blue
+                    arr.push(avg)
+                }
+                const arr2d = [] // into 2d arr
+                for (let i = 0; i < canvasEle.height; i++) {
+                    const a = arr.slice(i * canvasEle.width, (i + 1) * canvasEle.width)
+                    arr2d.push(a)
+                }
+                return Promise.resolve(arr2d)
             })
             console.log(canvasData);
+
             // await browser.close();
         }
 

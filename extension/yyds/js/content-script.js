@@ -28,15 +28,12 @@
                 setInterval(() => {
                     $canvas.freshCanvas()
                     $canvas.drawVideoImg()
-                }, 10)
+                }, 500)
             } else if (cmd === 'tab3') {
-                console.log('开始事件通讯');
-                const $canvas = new HandleCanvas()
                 const $e = new MyEvent($)
                 setTimeout(() => {
-                    $canvas.freshCanvas()
-                    const {width, height} = $canvas.drawVideoImg()
-                    $e.patchAjax({msg: 'close', width, height})
+                    console.log('开始事件通讯');
+                    $e.patchAjax({msg: 'close'})
                 }, 1000)
             }
         }

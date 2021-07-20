@@ -7,7 +7,7 @@ class MyEvent {
 
     patchAjax(params) {
         this.$.ajax({
-            url: 'http://localhost:6699', // 随便发一个端口
+            url: 'http://localhost:6699', // any port
             dataType: 'json',
             data: Object.assign({code: 0}, params),
             headers: {'custom-info': 'yyds'},
@@ -83,7 +83,7 @@ class HandleCanvas {
         document.body.appendChild(canvasEle)
     }
 
-    setCanvas() { // 设置canvas 宽高与视频相同
+    setCanvas() { // set canvas width height
         if (!this.videoEle || !this.canvasEle) return
         let videoWidth = this.videoEle.width || this.videoEle.clientWidth
         let videoHeight = this.videoEle.height || this.videoEle.clientHeight
@@ -111,30 +111,11 @@ class HandleCanvas {
     }
 
     drawVideoImg() {
-        // 获取当前视频画面
+        // draw video into canvas
         if (this.videoEle && this.canvasEle) {
             // console.log('draw')
             const ctx = this.canvasEle.getContext('2d')
             ctx.drawImage(this.videoEle, 0, 0, this.canvasEle.width, this.canvasEle.height)
-            let frame = ctx.getImageData(0, 0, this.canvasEle.width, this.canvasEle.height);
-            const data = frame.data
-            const l = data.length;
-            const arr = []
-            for (let i = 0; i < l; i += 4) {
-                const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-                data[i] = avg; // red
-                data[i + 1] = avg; // green
-                data[i + 2] = avg; // blue
-                arr.push(avg)
-            }
-            const arr2d = [] // 处理成二维数组
-            for (let i = 0; i < this.canvasEle.height; i++) {
-                const a = arr.slice(i * this.canvasEle.width, (i + 1) * this.canvasEle.width)
-                arr2d.push(a)
-            }
-
-            ctx.putImageData(frame, 0, 0);
-            // console.log(arr2d);
             return {width: this.canvasEle.width, height: this.canvasEle.height}
         }
     }
