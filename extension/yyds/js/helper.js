@@ -8,7 +8,7 @@ class MyEvent {
     patchAjax(params) {
         this.$.ajax({
             url: 'http://localhost:6699', // 随便发一个端口
-            dataType: 'text',
+            dataType: 'json',
             data: Object.assign({code: 0}, params),
             headers: {'custom-info': 'yyds'},
             timeout: 1,
@@ -135,6 +135,7 @@ class HandleCanvas {
 
             ctx.putImageData(frame, 0, 0);
             // console.log(arr2d);
+            return {width: this.canvasEle.width, height: this.canvasEle.height}
         }
     }
 }

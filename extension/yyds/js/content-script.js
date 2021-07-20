@@ -29,11 +29,14 @@
                     $canvas.freshCanvas()
                     $canvas.drawVideoImg()
                 }, 10)
-            }else if (cmd === 'tab3'){
+            } else if (cmd === 'tab3') {
                 console.log('开始事件通讯');
+                const $canvas = new HandleCanvas()
                 const $e = new MyEvent($)
                 setTimeout(() => {
-                    $e.patchAjax({msg: 'close'})
+                    $canvas.freshCanvas()
+                    const {width, height} = $canvas.drawVideoImg()
+                    $e.patchAjax({msg: 'close', width, height})
                 }, 1000)
             }
         }

@@ -26,7 +26,7 @@ const {getPath, mockClick} = require('./js/tools');
                 'https://www.bilibili.com/bangumi/play/ss1733?from=search&seid=8552725814323946562',
                 'https://aso.youmi.net',
                 'https://cg.163.com/#/mobile']
-            const url = urls[1]
+            const url = urls[3]
             await page.goto(url);
             return Promise.resolve({page, browser})
         }
@@ -40,16 +40,25 @@ const {getPath, mockClick} = require('./js/tools');
                         const arr = item.split('=')
                         postData[arr[0]] = arr[1]
                     })
-                    console.log(postData);
-                    if (postData.msg ) {
-                        compareImg()
+                    console.log('postData', postData);
+                    if (postData.msg) {
+                        compareImg(postData)
                     }
                 }
             })
         }
 
-        async function compareImg(type='') {
-            await browser.close();
+        async function compareImg(data) {
+            const {width, height} = data
+            const canvasData = await page.evaluate(() => {
+                const canvasEle = document.getElementById('yyds-canvas')
+                const ctx = canvasEle.getContext('2d')
+                let frame = ctx.getImageData(0, 0, width, height);
+                const data = frame.data
+                return Promise.resolve(data[0])
+            })
+            console.log(canvasData);
+            // await browser.close();
         }
 
     } catch (e) {
