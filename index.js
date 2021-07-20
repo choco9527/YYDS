@@ -7,16 +7,15 @@ const {getPath, mockClick} = require('./js/tools');
 (async () => {
     try {
         const {page, browser} = await openIt() // 打开页面
-        // await listenIt()
+        await listenIt()
 
-        const googleImgData = await _getImageData('img/test/google.png')
-        const ooImgData = await _getImageData('img/test/oo.png')
-        const yys = await _getImageData('img/yys/BOSS.png')
-
-        const {isTrust = 0, arr = []} = await _compareImg(googleImgData, ooImgData)
-        console.log(isTrust);
-        console.log(arr.length);
-
+        // const googleData = await _getImageData('img/test/google.png')
+        // const ooData = await _getImageData('img/test/oo.png')
+        // const bigGoogle = await _getImageData('img/test/googleBig.png')
+        // console.time()
+        // const res = await _compareImg(bigGoogle, googleData)
+        // console.log(res);
+        // console.timeEnd()
 
         async function openIt() {
             console.log('正在启动 Chrome')
@@ -37,7 +36,7 @@ const {getPath, mockClick} = require('./js/tools');
                 'https://www.bilibili.com/bangumi/play/ss1733?from=search&seid=8552725814323946562',
                 'https://aso.youmi.net',
                 'https://cg.163.com/#/mobile']
-            const url = urls[1]
+            const url = urls[4]
             await page.goto(url);
             return Promise.resolve({page, browser})
         }
@@ -74,7 +73,7 @@ const {getPath, mockClick} = require('./js/tools');
             const img = await loadImage(getPath(path))
             const canvas = createCanvas(img.width, img.height)
             const ctx = canvas.getContext('2d')
-            ctx.drawImage(img, 0, 0, img.width, img.height)
+            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 300, 300) // 缩放
             let frame = ctx.getImageData(0, 0, img.width, img.height);
             return _getCtx2dData(frame, img.width, img.height)
         }
@@ -86,9 +85,6 @@ const {getPath, mockClick} = require('./js/tools');
             const arr = []
             for (let i = 0; i < l; i += 4) {
                 const avg = ((data[i] + data[i + 1] + data[i + 2]) / 3) << 0;
-                data[i] = avg; // red
-                data[i + 1] = avg; // green
-                data[i + 2] = avg; // blue
                 arr.push(avg)
             }
             const arr2d = [] // into 2d arr
@@ -99,23 +95,32 @@ const {getPath, mockClick} = require('./js/tools');
             return arr2d
         }
 
-        async function _compareImg(dataBig, data) {
+        async function _compareImg(dataBig, data) { // 比较两张图 得出是否包含、所在位置
             const bigLen = dataBig.length, len = data.length
             const resData = []
             if (dataBig && data && bigLen > 0 && len > 0) {
                 let j = 0
                 for (let i = 0; i < bigLen; i++) {
-                    const rowBig = dataBig[i], bigRowLen = rowBig.length
+                    const rowBig = dataBig[i]
                     const stringBigRow = rowBig.join('-')
                     const row = data[j]
                     const stringRow = row.join('-')
                     const idx = stringBigRow.indexOf(stringRow) // 图2的行出现在图1
                     if (idx > 0) {
-                        resData.push([i, j, idx])
+                        resData.push([i, idx])
                         j++
                     }
                 }
-                return {isTrust: resData.length > (len / 2), arr: resData}
+                console.log(resData);
+                const resLen = resData.length
+                if (resLen > (len / 2)) {
+                    const top = resData[~~(resLen / 2) + 1][0] // 图2距图1 top
+                    const left = resData[~~(resLen / 2) + 1][1] + data[0].length / 2
+                    return {isTrust: resLen > (len / 2), position: {top, left}, arr: resData}
+                } else {
+                    return {isTrust: false}
+                }
+
             } else {
                 throw new Error('no data')
             }

@@ -71,8 +71,10 @@ class HandleCanvas {
 
         if (videoEle && canvasEle) { // 有可能暂时获取不到video
             this.videoEle = videoEle
-            canvasEle.width = videoEle.width || videoEle.clientWidth
-            canvasEle.height = videoEle.height || videoEle.clientHeight
+            // canvasEle.width = videoEle.width || videoEle.clientWidth
+            // canvasEle.height = videoEle.height || videoEle.clientHeight
+            canvasEle.width = 300
+            canvasEle.height = 270
             if (videoEle.paused) {
                 this.videoEle.muted = true
                 this.videoEle.play()
@@ -107,13 +109,11 @@ class HandleCanvas {
             this.initCanvas()
             return
         }
-        this.setCanvas()
     }
 
     drawVideoImg() {
         // draw video into canvas
         if (this.videoEle && this.canvasEle) {
-            // console.log('draw')
             const ctx = this.canvasEle.getContext('2d')
             ctx.drawImage(this.videoEle, 0, 0, this.canvasEle.width, this.canvasEle.height)
             return {width: this.canvasEle.width, height: this.canvasEle.height}
