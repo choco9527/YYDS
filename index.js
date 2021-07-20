@@ -18,21 +18,27 @@ const {getPath, mockClick} = require('./js/tools');
                 executablePath: process.env.CHROME_PATH
             }
             const browser = await puppeteer.launch(options);
-
             const page = await browser.newPage();
 
             const urls = ['https://cg.163.com/#/search?key=%E9%98%B4%E9%98%B3%E5%B8%88',
                 'https://www.baidu.com/',
-                'https://www.bilibili.com/video/BV13Z4y137Kt?from=search&seid=14938727801566765673',
+                'https://www.bilibili.com/bangumi/play/ss1733?from=search&seid=8552725814323946562',
                 'https://aso.youmi.net',
                 'https://cg.163.com/#/mobile']
-            const url = urls[3]
+            const url = urls[2]
             await page.goto(url);
-
-            // setInterval(async ()=>{ // 模拟点击
-            //     await mockClick({page,x:80, y:80})
-            // },3000)
         }
+
+        async function listenIt() {
+            const result = await page.evaluate(x => {
+                return Promise.resolve(8 * x);
+            }, 7); // （译者注： 7 可以是你自己代码里任意方式得到的值）
+            console.log(result); // 输出 "56"
+        }
+
+        // setInterval(async ()=>{ // 模拟点击
+        //     await mockClick({page,x:80, y:80})
+        // },3000)
 
         // await browser.close();
     } catch (e) {

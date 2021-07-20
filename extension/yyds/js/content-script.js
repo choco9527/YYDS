@@ -25,10 +25,14 @@
             } else if (cmd === 'tab2') {
                 console.log('开始监听视频')
                 const $canvas = new HandleCanvas()
-                setInterval(() => {
+                // const timer = setInterval(() => {
+                //     $canvas.freshCanvas()
+                //     $canvas.drawVideoImg()
+                // }, 10)
+                setTimeout(() => {
                     $canvas.freshCanvas()
                     $canvas.drawVideoImg()
-                }, 10)
+                }, 2000)
             }
         }
         sendResponse('ok')

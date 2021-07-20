@@ -103,13 +103,22 @@ class HandleCanvas {
             let frame = ctx.getImageData(0, 0, this.canvasEle.width, this.canvasEle.height);
             const data = frame.data
             const l = data.length;
+            const arr = []
             for (let i = 0; i < l; i += 4) {
-                data[i] = 255 - data[i]; // red
-                data[i + 1] = 255 - data[i + 1]; // green
-                data[i + 2] = 255 - data[i + 2]; // blue
+                const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                data[i] = avg; // red
+                data[i + 1] = avg; // green
+                data[i + 2] = avg; // blue
+                arr.push(avg)
             }
+            const arr2d = [] // 处理成二维数组
+            for (let i=0;i<this.canvasEle.height;i++) {
+                const a = arr.slice(i*this.canvasEle.width,(i+1)*this.canvasEle.width)
+                arr2d.push(a)
+            }
+
             ctx.putImageData(frame, 0, 0);
-            // console.log(frame);
+            console.log(arr2d);
         }
     }
 }
