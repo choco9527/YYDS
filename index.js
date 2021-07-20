@@ -7,15 +7,14 @@ const {getPath, mockClick} = require('./js/tools');
 (async () => {
     try {
         const {page, browser} = await openIt() // 打开页面
-        await listenIt()
+        // await listenIt()
 
-        // const googleData = await _getImageData('img/test/google.png')
-        // const ooData = await _getImageData('img/test/oo.png')
-        // const bigGoogle = await _getImageData('img/test/googleBig.png')
-        // console.time()
-        // const res = await _compareImg(bigGoogle, googleData)
-        // console.log(res);
-        // console.timeEnd()
+        const googleData = await _getImageData('img/test/google.png')
+        const ooData = await _getImageData('img/test/oo.png')
+        const bigGoogle = await _getImageData('img/test/googleBig.png')
+        console.time()
+        const res = await _compareImg(bigGoogle, googleData)
+        console.timeEnd()
 
         async function openIt() {
             console.log('正在启动 Chrome')
