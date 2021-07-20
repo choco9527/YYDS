@@ -7,8 +7,12 @@ const {getPath, mockClick} = require('./js/tools');
 (async () => {
     try {
         const {page, browser} = await openIt() // 打开页面
-        await listenIt()
-        await getImageData('img/BOSS.png')
+        // await listenIt()
+
+        const googleImgData = await _getImageData('img/test/google.png')
+        const ooImgData = await _getImageData('img/test/oo.png')
+        await _compareImg(googleImgData, ooImgData)
+
 
         async function openIt() {
             console.log('正在启动 Chrome')
@@ -51,27 +55,27 @@ const {getPath, mockClick} = require('./js/tools');
             })
         }
 
-        async function getVideoData() {
+        async function _getVideoData() {
             return await page.evaluate(() => {
                 const canvasEle = document.getElementById('yyds-canvas')
                 const ctx = canvasEle.getContext('2d')
                 let frame = ctx.getImageData(0, 0, canvasEle.width, canvasEle.height);
-                const arr2d = getCtx2dData(frame, canvasEle.width, canvasEle.height)
+                const arr2d = _getCtx2dData(frame, canvasEle.width, canvasEle.height)
                 return Promise.resolve(arr2d)
             })
         }
 
-        async function getImageData(path='') {
+        async function _getImageData(path = '') {
             if (!path) throw new Error('no path')
             const img = await loadImage(getPath(path))
             const canvas = createCanvas(img.width, img.height)
             const ctx = canvas.getContext('2d')
             ctx.drawImage(img, 0, 0, img.width, img.height)
             let frame = ctx.getImageData(0, 0, img.width, img.height);
-            const arr2d = getCtx2dData(frame, img.width, img.height)
+            const arr2d = _getCtx2dData(frame, img.width, img.height)
         }
 
-        function getCtx2dData(frame=null,width=0,height=0) {
+        function _getCtx2dData(frame = null, width = 0, height = 0) {
             if (!frame) throw new Error('no frame')
             const data = frame.data
             const l = data.length;
@@ -91,9 +95,10 @@ const {getPath, mockClick} = require('./js/tools');
             return arr2d
         }
 
-        async function compareImg(data) {
-            const videoData = await getVideoData()
-            const imgData = await getImageData()
+        async function _compareImg(dataWhole, dataPic) { // dataWhole contain dataPic
+            if (dataWhole && dataPic && dataWhole.length > 0 && dataPic.length > 0) {
+
+            }
         }
 
     } catch (e) {
