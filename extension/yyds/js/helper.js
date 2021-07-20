@@ -73,7 +73,7 @@ class HandleCanvas {
             this.videoEle = videoEle
             // canvasEle.width = videoEle.width || videoEle.clientWidth
             // canvasEle.height = videoEle.height || videoEle.clientHeight
-            canvasEle.width = 300
+            canvasEle.width = 480
             canvasEle.height = 270
             if (videoEle.paused) {
                 this.videoEle.muted = true
