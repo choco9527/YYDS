@@ -11,7 +11,11 @@ const {getPath, mockClick} = require('./js/tools');
 
         const googleImgData = await _getImageData('img/test/google.png')
         const ooImgData = await _getImageData('img/test/oo.png')
-        await _compareImg(googleImgData, ooImgData)
+        const yys = await _getImageData('img/yys/BOSS.png')
+
+        const {isTrust = 0, arr = []} = await _compareImg(googleImgData, ooImgData)
+        console.log(isTrust);
+        console.log(arr.length);
 
 
         async function openIt() {
@@ -49,7 +53,7 @@ const {getPath, mockClick} = require('./js/tools');
                     })
                     if (postData.code + '' === '0') {
                         console.log('postData', postData);
-                        compareImg(postData)
+                        _compareImg(postData)
                     }
                 }
             })
@@ -72,7 +76,7 @@ const {getPath, mockClick} = require('./js/tools');
             const ctx = canvas.getContext('2d')
             ctx.drawImage(img, 0, 0, img.width, img.height)
             let frame = ctx.getImageData(0, 0, img.width, img.height);
-            const arr2d = _getCtx2dData(frame, img.width, img.height)
+            return _getCtx2dData(frame, img.width, img.height)
         }
 
         function _getCtx2dData(frame = null, width = 0, height = 0) {
@@ -81,7 +85,7 @@ const {getPath, mockClick} = require('./js/tools');
             const l = data.length;
             const arr = []
             for (let i = 0; i < l; i += 4) {
-                const avg = Math.floor((data[i] + data[i + 1] + data[i + 2]) / 3);
+                const avg = ((data[i] + data[i + 1] + data[i + 2]) / 3) << 0;
                 data[i] = avg; // red
                 data[i + 1] = avg; // green
                 data[i + 2] = avg; // blue
@@ -95,9 +99,25 @@ const {getPath, mockClick} = require('./js/tools');
             return arr2d
         }
 
-        async function _compareImg(dataWhole, dataPic) { // dataWhole contain dataPic
-            if (dataWhole && dataPic && dataWhole.length > 0 && dataPic.length > 0) {
-
+        async function _compareImg(dataBig, data) {
+            const bigLen = dataBig.length, len = data.length
+            const resData = []
+            if (dataBig && data && bigLen > 0 && len > 0) {
+                let j = 0
+                for (let i = 0; i < bigLen; i++) {
+                    const rowBig = dataBig[i], bigRowLen = rowBig.length
+                    const stringBigRow = rowBig.join('-')
+                    const row = data[j]
+                    const stringRow = row.join('-')
+                    const idx = stringBigRow.indexOf(stringRow) // 图2的行出现在图1
+                    if (idx > 0) {
+                        resData.push([i, j, idx])
+                        j++
+                    }
+                }
+                return {isTrust: resData.length > (len / 2), arr: resData}
+            } else {
+                throw new Error('no data')
             }
         }
 
