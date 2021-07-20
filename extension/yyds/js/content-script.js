@@ -25,14 +25,16 @@
             } else if (cmd === 'tab2') {
                 console.log('开始监听视频')
                 const $canvas = new HandleCanvas()
-                // const timer = setInterval(() => {
-                //     $canvas.freshCanvas()
-                //     $canvas.drawVideoImg()
-                // }, 10)
-                setTimeout(() => {
+                setInterval(() => {
                     $canvas.freshCanvas()
                     $canvas.drawVideoImg()
-                }, 2000)
+                }, 10)
+            }else if (cmd === 'tab3'){
+                console.log('开始事件通讯');
+                const $e = new MyEvent($)
+                setTimeout(() => {
+                    $e.patchAjax({msg: 'close'})
+                }, 1000)
             }
         }
         sendResponse('ok')

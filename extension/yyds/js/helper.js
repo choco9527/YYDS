@@ -5,6 +5,23 @@ class MyEvent {
         this.initPoint()
     }
 
+    patchAjax(params) {
+        this.$.ajax({
+            url: 'http://localhost:6699', // 随便发一个端口
+            dataType: 'text',
+            data: Object.assign({code: 0}, params),
+            headers: {'custom-info': 'yyds'},
+            timeout: 1,
+            type: 'post',
+            success(res) {
+                console.log(res);
+            },
+            error(err) {
+                console.log(err);
+            }
+        });
+    }
+
     initPoint() { // 初始化小圆点
         this.showPoint = this.$('<p class="show-point"/>')
         const bodyEl = this.$('body')
@@ -64,7 +81,6 @@ class HandleCanvas {
 
         this.canvasEle = canvasEle
         document.body.appendChild(canvasEle)
-        console.log('init success');
     }
 
     setCanvas() { // 设置canvas 宽高与视频相同
@@ -112,13 +128,13 @@ class HandleCanvas {
                 arr.push(avg)
             }
             const arr2d = [] // 处理成二维数组
-            for (let i=0;i<this.canvasEle.height;i++) {
-                const a = arr.slice(i*this.canvasEle.width,(i+1)*this.canvasEle.width)
+            for (let i = 0; i < this.canvasEle.height; i++) {
+                const a = arr.slice(i * this.canvasEle.width, (i + 1) * this.canvasEle.width)
                 arr2d.push(a)
             }
 
             ctx.putImageData(frame, 0, 0);
-            console.log(arr2d);
+            // console.log(arr2d);
         }
     }
 }
