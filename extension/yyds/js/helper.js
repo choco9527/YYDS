@@ -57,6 +57,8 @@ class HandleCanvas {
         this.selector = videoSelector
         this.canvasEle = null
         this.videoEle = null
+        this.viewWidth = 960
+        this.viewHeight = 540
         this.initCanvas()
     }
 
@@ -70,15 +72,10 @@ class HandleCanvas {
         canvasEle.style.left = '0'
 
         if (videoEle && canvasEle) { // 有可能暂时获取不到video
+            canvasEle.width = this.viewWidth
+            canvasEle.height = this.viewHeight
             this.videoEle = videoEle
-            // canvasEle.width = videoEle.width || videoEle.clientWidth
-            // canvasEle.height = videoEle.height || videoEle.clientHeight
-            canvasEle.width = 480
-            canvasEle.height = 270
-            if (videoEle.paused) {
-                this.videoEle.muted = true
-                this.videoEle.play()
-            }
+            this.freshVideo()
         }
 
         this.canvasEle = canvasEle
@@ -95,14 +92,21 @@ class HandleCanvas {
         }
     }
 
+    freshVideo() {
+        console.log('fresh');
+        this.videoEle.style.width = this.viewWidth + 'px'
+        this.videoEle.style.height = this.viewHeight + 'px'
+        this.videoEle.width = this.viewWidth
+        this.videoEle.height = this.viewHeight
+    }
+
     freshCanvas() {
         if (!this.videoEle) {
             this.videoEle = document.querySelector(this.selector ? this.selector : 'video')
             return
         }
-        if (this.videoEle.paused) {
-            this.videoEle.muted = true
-            this.videoEle.play()
+        if (this.videoEle) {
+            this.freshVideo()
         }
 
         if (!this.canvasEle) {

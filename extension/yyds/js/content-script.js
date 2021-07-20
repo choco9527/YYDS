@@ -31,10 +31,8 @@
                 }, 500)
             } else if (cmd === 'tab3') {
                 const $e = new MyEvent($)
-                setTimeout(() => {
-                    console.log('开始事件通讯');
-                    $e.patchAjax({msg: 'close'})
-                }, 1000)
+                console.log('开始事件通讯');
+                $e.patchAjax({msg: 'close'})
             }
         }
         sendResponse('ok')

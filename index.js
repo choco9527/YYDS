@@ -9,11 +9,12 @@ const {getPath, mockClick} = require('./js/tools');
         const {page, browser} = await openIt() // 打开页面
         // await listenIt()
 
-        const googleData = await _getImageData('img/test/google.png')
-        const ooData = await _getImageData('img/test/oo.png')
-        const bigGoogle = await _getImageData('img/test/googleBig.png')
+        const bigData = await _getImageData('img/test/bigtest.png')
+        const smallData = await _getImageData('img/yys/BA-QI-DA-SHE.png')
         console.time()
-        const res = await _compareImg(bigGoogle, googleData)
+        console.log(bigData, smallData);
+        const res = await _compareImg(bigData, smallData)
+        console.log(res);
         console.timeEnd()
 
         async function openIt() {
@@ -29,13 +30,15 @@ const {getPath, mockClick} = require('./js/tools');
             const browser = await puppeteer.launch(options);
             const page = await browser.newPage();
 
-            const urls = ['https://cg.163.com/#/search?key=%E9%98%B4%E9%98%B3%E5%B8%88',
+            const urls = [
+                'https://cg.163.com/index.html#/mobile',
+                'https://cg.163.com/#/search?key=%E9%98%B4%E9%98%B3%E5%B8%88',
                 'https://www.google.com',
                 'https://xuliangzhan_admin.gitee.io/vxe-table/#/column/api',
                 'https://www.bilibili.com/bangumi/play/ss1733?from=search&seid=8552725814323946562',
                 'https://aso.youmi.net',
                 'https://cg.163.com/#/mobile']
-            const url = urls[4]
+            const url = urls[0]
             await page.goto(url);
             return Promise.resolve({page, browser})
         }
@@ -67,12 +70,12 @@ const {getPath, mockClick} = require('./js/tools');
             })
         }
 
-        async function _getImageData(path = '') {
+        async function _getImageData(path = '', scale = false) {
             if (!path) throw new Error('no path')
             const img = await loadImage(getPath(path))
             const canvas = createCanvas(img.width, img.height)
             const ctx = canvas.getContext('2d')
-            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 300, 300) // 缩放
+            ctx.drawImage(img,0,0, img.width, img.height)
             let frame = ctx.getImageData(0, 0, img.width, img.height);
             return _getCtx2dData(frame, img.width, img.height)
         }
@@ -110,14 +113,13 @@ const {getPath, mockClick} = require('./js/tools');
                         j++
                     }
                 }
-                console.log(resData);
                 const resLen = resData.length
                 if (resLen > (len / 2)) {
                     const top = resData[~~(resLen / 2) + 1][0] // 图2距图1 top
                     const left = resData[~~(resLen / 2) + 1][1] + data[0].length / 2
                     return {isTrust: resLen > (len / 2), position: {top, left}, arr: resData}
                 } else {
-                    return {isTrust: false}
+                    return {isTrust: false, arr: resData}
                 }
 
             } else {
