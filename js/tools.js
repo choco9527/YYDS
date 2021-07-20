@@ -16,6 +16,7 @@ function getCircleArea(x = 0, y = 0, r = 10) { // get area by xy for circle
 }
 
 async function mockClick({page = null, x = 0, y = 0}) { // a new click loop
+    console.log('a new click loop')
     console.time()
 
     const click = async () => { // just once click

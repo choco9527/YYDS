@@ -5,7 +5,7 @@ class MyEvent {
         this.initPoint()
     }
 
-    patchAjax(params) {
+    emit(params) {
         this.$.ajax({
             url: 'http://localhost:6699', // any port
             dataType: 'json',
@@ -93,11 +93,11 @@ class HandleCanvas {
     }
 
     freshVideo() {
-        console.log('fresh');
-        this.videoEle.style.width = this.viewWidth + 'px'
-        this.videoEle.style.height = this.viewHeight + 'px'
-        this.videoEle.width = this.viewWidth
-        this.videoEle.height = this.viewHeight
+        // console.log('fresh');
+        // this.videoEle.style.width = this.viewWidth + 'px'
+        // this.videoEle.style.height = this.viewHeight + 'px'
+        // this.videoEle.width = this.viewWidth
+        // this.videoEle.height = this.viewHeight
     }
 
     freshCanvas() {
@@ -119,6 +119,7 @@ class HandleCanvas {
         // draw video into canvas
         if (this.videoEle && this.canvasEle) {
             const ctx = this.canvasEle.getContext('2d')
+            ctx.imageSmoothingEnabled = false;
             ctx.drawImage(this.videoEle, 0, 0, this.canvasEle.width, this.canvasEle.height)
             return {width: this.canvasEle.width, height: this.canvasEle.height}
         }
