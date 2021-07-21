@@ -9,13 +9,6 @@ const {getPath, mockClick} = require('./js/tools');
         const {page, browser} = await openIt() // 打开页面
         await listenIt()
 
-        // const bigData = await _getImageData('img/test/bigtest.png')
-        // const smallData = await _getImageData('img/yys/BA-QI-DA-SHE.png')
-        // console.time()
-        // console.log(bigData, smallData);
-        // const res = await _compareImg(bigData, smallData)
-        // console.log(res);
-        // console.timeEnd()
 
         async function openIt() {
             console.log('正在启动 Chrome')
@@ -36,13 +29,13 @@ const {getPath, mockClick} = require('./js/tools');
                 'https://www.google.com',
                 'https://aso.youmi.net',
                 'https://cg.163.com/#/mobile']
-            const url = urls[3]
+            const url = urls[2]
             await page.goto(url);
             return Promise.resolve({page, browser})
         }
 
         async function listenIt() { // 监听页面
-            page.on('request', request => {
+            page.on('request', async request => {
                 const {_headers} = request
                 if (_headers['custom-info'] === 'yyds') {
                     const postData = {}
@@ -52,7 +45,15 @@ const {getPath, mockClick} = require('./js/tools');
                     })
                     if (postData.code + '' === '0') {
                         console.log('postData', postData);
-                        // _compareImg(postData)
+                        const bigData = await _getImageData('img/test/googleBig.png')
+                        const smallData = await _getImageData('img/test/google.png')
+                        console.time()
+                        const res = await _compareImg(bigData, smallData)
+                        console.log(res);
+                        console.timeEnd()
+                        if (res.isTrust) {
+                            await mockClick({page, x: res.position.left, y: res.position.top})
+                        }
                     }
                 }
             })
@@ -73,7 +74,7 @@ const {getPath, mockClick} = require('./js/tools');
             const img = await loadImage(getPath(path))
             const canvas = createCanvas(img.width, img.height)
             const ctx = canvas.getContext('2d')
-            ctx.drawImage(img,0,0, img.width, img.height)
+            ctx.drawImage(img, 0, 0, img.width, img.height)
             let frame = ctx.getImageData(0, 0, img.width, img.height);
             return _getCtx2dData(frame, img.width, img.height)
         }
@@ -104,11 +105,13 @@ const {getPath, mockClick} = require('./js/tools');
                     const rowBig = dataBig[i]
                     const stringBigRow = rowBig.join('-')
                     const row = data[j]
-                    const stringRow = row.join('-')
-                    const idx = stringBigRow.indexOf(stringRow) // 图2的行出现在图1
-                    if (idx > 0) {
-                        resData.push([i, idx])
-                        j++
+                    if (row) {
+                        const stringRow = row.join('-')
+                        const idx = stringBigRow.indexOf(stringRow) // 图2的行出现在图1
+                        if (idx > 0) {
+                            resData.push([i, idx])
+                            j++
+                        }
                     }
                 }
                 const resLen = resData.length
