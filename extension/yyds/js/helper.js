@@ -64,22 +64,15 @@ class HandleCanvas {
 
     initCanvas() { // 初始化canvas
         let canvasEle = document.createElement('canvas')
-        let videoEle = document.querySelector(this.selector ? this.selector : 'video')
         canvasEle.id = 'yyds-canvas'
-        canvasEle.style.zIndex = 9999
+        canvasEle.style.zIndex = 999
         canvasEle.style.position = 'fixed'
         canvasEle.style.bottom = '0'
         canvasEle.style.left = '0'
-
-        if (videoEle && canvasEle) { // 有可能暂时获取不到video
-            canvasEle.width = this.viewWidth
-            canvasEle.height = this.viewHeight
-            this.videoEle = videoEle
-            this.freshVideo()
-        }
-
-        this.canvasEle = canvasEle
+        canvasEle.width = this.viewWidth
+        canvasEle.height = this.viewHeight
         document.body.appendChild(canvasEle)
+        this.canvasEle = canvasEle
     }
 
     setCanvas() { // set canvas width height
@@ -93,20 +86,16 @@ class HandleCanvas {
     }
 
     freshVideo() {
-        console.log('fresh');
         this.videoEle.style.width = this.viewWidth + 'px'
         this.videoEle.style.height = this.viewHeight + 'px'
         this.videoEle.width = this.viewWidth
         this.videoEle.height = this.viewHeight
     }
 
-    freshCanvas() {
+    fresh() {
         if (!this.videoEle) {
             this.videoEle = document.querySelector(this.selector ? this.selector : 'video')
             return
-        }
-        if (this.videoEle) {
-            this.freshVideo()
         }
 
         if (!this.canvasEle) {

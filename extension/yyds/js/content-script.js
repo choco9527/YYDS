@@ -26,7 +26,7 @@
                 console.log('开始监听视频')
                 const $canvas = new HandleCanvas()
                 setInterval(() => {
-                    $canvas.freshCanvas()
+                    $canvas.fresh()
                     $canvas.drawVideoImg()
                 }, 500)
             } else if (cmd === 'tab3') {

@@ -7,15 +7,15 @@ const {getPath, mockClick} = require('./js/tools');
 (async () => {
     try {
         const {page, browser} = await openIt() // 打开页面
-        // await listenIt()
+        await listenIt()
 
-        const bigData = await _getImageData('img/test/bigtest.png')
-        const smallData = await _getImageData('img/yys/BA-QI-DA-SHE.png')
-        console.time()
-        console.log(bigData, smallData);
-        const res = await _compareImg(bigData, smallData)
-        console.log(res);
-        console.timeEnd()
+        // const bigData = await _getImageData('img/test/bigtest.png')
+        // const smallData = await _getImageData('img/yys/BA-QI-DA-SHE.png')
+        // console.time()
+        // console.log(bigData, smallData);
+        // const res = await _compareImg(bigData, smallData)
+        // console.log(res);
+        // console.timeEnd()
 
         async function openIt() {
             console.log('正在启动 Chrome')
@@ -34,11 +34,9 @@ const {getPath, mockClick} = require('./js/tools');
                 'https://cg.163.com/index.html#/mobile',
                 'https://cg.163.com/#/search?key=%E9%98%B4%E9%98%B3%E5%B8%88',
                 'https://www.google.com',
-                'https://xuliangzhan_admin.gitee.io/vxe-table/#/column/api',
-                'https://www.bilibili.com/bangumi/play/ss1733?from=search&seid=8552725814323946562',
                 'https://aso.youmi.net',
                 'https://cg.163.com/#/mobile']
-            const url = urls[0]
+            const url = urls[3]
             await page.goto(url);
             return Promise.resolve({page, browser})
         }
@@ -54,7 +52,7 @@ const {getPath, mockClick} = require('./js/tools');
                     })
                     if (postData.code + '' === '0') {
                         console.log('postData', postData);
-                        _compareImg(postData)
+                        // _compareImg(postData)
                     }
                 }
             })
