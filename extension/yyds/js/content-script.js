@@ -15,7 +15,6 @@
     chrome.runtime.onMessage.addListener((res, sender, sendResponse) => { // 接受消息
         if (res.code === 'yyds') {
             const {cmd} = res
-            let timer = null
             if (cmd === 'tab1') {
                 console.log('开始监听点击')
                 const $e = new MyEvent($)
@@ -26,17 +25,14 @@
             } else if (cmd === 'tab2') {
                 console.log('开始监听视频')
                 const $canvas = new HandleCanvas()
-                timer = setInterval(() => {
-                    $canvas.freshCanvas()
+                setInterval(() => {
+                    $canvas.fresh()
                     $canvas.drawVideoImg()
                 }, 500)
             } else if (cmd === 'tab3') {
                 const $e = new MyEvent($)
-                console.log('发射事件');
+                console.log('开始事件通讯');
                 $e.emit({msg: 'close'})
-            } else if (cmd === 'tab4') {
-                console.log('停止监听视频')
-                clearTimeout(timer)
             }
         }
         sendResponse('ok')

@@ -45,6 +45,7 @@ async function mockClick({page = null, x = 0, y = 0}) { // a new click loop
     }
     await loopClick(3)
     console.timeEnd() // 一轮点击时长 = 次数：loopClickTimes × (频率：frequency + 点击延时：delay)
+    return Promise.resolve('success')
 }
 
 
