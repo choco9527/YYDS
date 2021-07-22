@@ -6,10 +6,9 @@ const {getPath, mockClick} = require('./js/tools');
 
 (async () => {
     try {
-        const {page1, browser} = await openIt() // 打开页面
+        const { browser} = await openIt() // 打开页面
         let pages = await browser.pages()
         let page = null
-
         async function getPage() { // get page
             pages = await browser.pages()
             for (let i = 0; i < pages.length; i++) {
@@ -24,16 +23,17 @@ const {getPath, mockClick} = require('./js/tools');
             }
         }
 
-        await listenIt()
-
         async function openIt() {
             console.log('正在启动 Chrome')
             const extendUrl = 'extension/yyds'
             const options = {
                 headless: false,
-                args: [`--disable-extensions-except=${getPath(extendUrl)}`, "--window-position=0,0"],
-                defaultViewport: null,
-                devtools: true,
+                args: [`--disable-extensions-except=${getPath(extendUrl)}`, "--window-position=0,0",`--window-size=980,700`],
+                defaultViewport: {
+                    width: 960,
+                    height:540
+                },
+                // devtools: true,
                 executablePath: process.env.CHROME_PATH
             }
             const browser = await puppeteer.launch(options);
@@ -51,7 +51,7 @@ const {getPath, mockClick} = require('./js/tools');
 
         async function listenIt() { // 循环监听页面
             if (!page) {
-                console.log('no-page-' + Date.now())
+                console.log('loadingPage-' + Date.now())
                 setTimeout(async () => {
                     await getPage()
                     await listenIt()
@@ -69,8 +69,8 @@ const {getPath, mockClick} = require('./js/tools');
                         postData[arr[0]] = arr[1]
                     })
                     if (postData.code + '' === '0') {
-                        const bigData = await _getImageData('img/test/bigcanvas.png')
-                        const smallData = await _getImageData('img/yys/BA-QI-DA-SHE.png')
+                        const bigData = await _getVideoData()
+                        const smallData = await _getImageData('img/yys/user-center.png')
                         console.time()
                         const res = await _compareImg(bigData, smallData)
                         console.log(res);
@@ -81,6 +81,23 @@ const {getPath, mockClick} = require('./js/tools');
                     }
                 }
             })
+        }
+
+        function _getCtx2dData(frame = null, width = 0, height = 0) {
+            if (!frame) throw new Error('no frame')
+            const data = frame.data
+            const l = data.length;
+            const arr = []
+            for (let i = 0; i < l; i += 4) {
+                const avg = ((data[i] + data[i + 1] + data[i + 2]) / 3) << 0;
+                arr.push(avg)
+            }
+            const arr2d = [] // into 2d arr
+            for (let i = 0; i < height; i++) {
+                const a = arr.slice(i * width, (i + 1) * width)
+                arr2d.push(a)
+            }
+            return arr2d
         }
 
         async function _getVideoData() {
@@ -101,23 +118,6 @@ const {getPath, mockClick} = require('./js/tools');
             ctx.drawImage(img, 0, 0, img.width, img.height)
             let frame = ctx.getImageData(0, 0, img.width, img.height);
             return _getCtx2dData(frame, img.width, img.height)
-        }
-
-        function _getCtx2dData(frame = null, width = 0, height = 0) {
-            if (!frame) throw new Error('no frame')
-            const data = frame.data
-            const l = data.length;
-            const arr = []
-            for (let i = 0; i < l; i += 4) {
-                const avg = ((data[i] + data[i + 1] + data[i + 2]) / 3) << 0;
-                arr.push(avg)
-            }
-            const arr2d = [] // into 2d arr
-            for (let i = 0; i < height; i++) {
-                const a = arr.slice(i * width, (i + 1) * width)
-                arr2d.push(a)
-            }
-            return arr2d
         }
 
         async function _compareImg(dataBig, data) { // 比较两张图 得出是否包含、所在位置
@@ -151,6 +151,8 @@ const {getPath, mockClick} = require('./js/tools');
                 throw new Error('no data')
             }
         }
+
+        await listenIt() // 监听页面
 
     } catch (e) {
         console.warn(e);

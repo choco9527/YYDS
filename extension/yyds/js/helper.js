@@ -65,7 +65,7 @@ class HandleCanvas {
     initCanvas() { // 初始化canvas
         let canvasEle = document.createElement('canvas')
         canvasEle.id = 'yyds-canvas'
-        canvasEle.style.zIndex = 999
+        canvasEle.style.zIndex = '-999'
         canvasEle.style.position = 'fixed'
         canvasEle.style.bottom = '0'
         canvasEle.style.left = '0'
