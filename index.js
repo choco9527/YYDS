@@ -9,16 +9,21 @@ const {getPath, mockClick} = require('./js/tools');
         const {page1, browser} = await openIt() // 打开页面
         let pages = await browser.pages()
         let page = null
-        setInterval(async ()=>{
-            pages =  await browser.pages()
+
+        async function getPage() { // get page
+            pages = await browser.pages()
             for (let i = 0; i < pages.length; i++) {
                 const p = pages[i]
                 if (p.url() === 'about:blank') await p.close()
-                if (p.url().includes('cg.163.com/run.html')){
+                if (p.url().includes('cg.163.com/run.html')) {
+                    page = p
+                }
+                if (p.url().includes('baidu')) {
                     page = p
                 }
             }
-        },1000)
+        }
+
         await listenIt()
 
         async function openIt() {
@@ -37,41 +42,45 @@ const {getPath, mockClick} = require('./js/tools');
             const urls = [
                 'https://cg.163.com/index.html#/mobile',
                 'https://cg.163.com/#/search?key=%E9%98%B4%E9%98%B3%E5%B8%88',
-                'https://www.google.com',
-                'https://aso.youmi.net',
-                'https://cg.163.com/#/mobile']
+                'https://www.baidu.com',
+            ]
             const url = urls[1]
             await page1.goto(url);
             return Promise.resolve({page1, browser})
         }
 
-        async function listenIt() { // 监听每一个页面
-          if (!page) {
-              console.log('no page')
-              return
-          }
-        page.on('request', async request => {
-            const {_headers} = request
-            if (_headers['custom-info'] === 'yyds') {
+        async function listenIt() { // 循环监听页面
+            if (!page) {
+                console.log('no-page-' + Date.now())
+                setTimeout(async () => {
+                    await getPage()
+                    await listenIt()
+                }, 1000)
+                return
+            }
+            console.log(page.url());
+            page.on('request', async request => {
+                const {_headers} = request
+                if (_headers['custom-info'] === 'yyds') {
 
-                const postData = {}
-                request.postData().split('&').forEach(item => {
-                    const arr = item.split('=')
-                    postData[arr[0]] = arr[1]
-                })
-                if (postData.code + '' === '0') {
-                    const bigData = await _getImageData('img/test/bigcanvas.png')
-                    const smallData = await _getImageData('img/yys/BA-QI-DA-SHE.png')
-                    console.time()
-                    const res = await _compareImg(bigData, smallData)
-                    console.log(res);
-                    console.timeEnd()
-                    if (res.isTrust) {
-                        await mockClick({page, x: res.position.left, y: res.position.top})
+                    const postData = {}
+                    request.postData().split('&').forEach(item => {
+                        const arr = item.split('=')
+                        postData[arr[0]] = arr[1]
+                    })
+                    if (postData.code + '' === '0') {
+                        const bigData = await _getImageData('img/test/bigcanvas.png')
+                        const smallData = await _getImageData('img/yys/BA-QI-DA-SHE.png')
+                        console.time()
+                        const res = await _compareImg(bigData, smallData)
+                        console.log(res);
+                        console.timeEnd()
+                        if (res.isTrust) {
+                            await mockClick({page, x: res.position.left, y: res.position.top})
+                        }
                     }
                 }
-            }
-        })
+            })
         }
 
         async function _getVideoData() {
