@@ -22,14 +22,14 @@ async function mockClick({page = null, x = 0, y = 0}) { // a new click loop
     const click = async () => { // just once click
         const {cX, cY} = getCircleArea(x, y)
         console.log('click:', x + cX, y + cY)
-        await page.mouse.click(x + cX, y + cY, {delay: randomNumber(0,10)})
+        await page.mouse.click(x + cX, y + cY, {delay: randomNumber(0, 10)})
     }
 
-    const loopClick = async (loopClickTimes=1) => {
+    const loopClick = async (loopClickTimes = 1) => {
         // create loopClick
-        if (loopClickTimes < 1 ) return
-        let times = randomNumber(1,loopClickTimes), timing = 0
-        const dispatchTimeClick = async (x = 0, y = 0,frequency = randomNumber(222, 666)) => { // create a frequency click
+        if (loopClickTimes < 1) return
+        let times = randomNumber(1, loopClickTimes), timing = 0
+        const dispatchTimeClick = async (x = 0, y = 0, frequency = randomNumber(222, 666)) => { // create a frequency click
             return new Promise(resolve => {
                 const t = setTimeout(async () => {
                     await click()
@@ -38,8 +38,8 @@ async function mockClick({page = null, x = 0, y = 0}) { // a new click loop
             })
         }
         while (timing < times) {
-            timing ++
-            await dispatchTimeClick(x,y)
+            timing++
+            await dispatchTimeClick(x, y)
         }
         console.log(timing);
     }
@@ -54,9 +54,9 @@ function _getCtx2dData(frame = null, width = 0, height = 0) {
     const data = frame.data
     const l = data.length;
     const arr = []
-    for (let i = 0; i < l; i += 4) {
+    for (let i = 0; i < l; i += 4) { // Gray scale
         const avg = ((data[i] + data[i + 1] + data[i + 2]) / 3) << 0;
-        arr.push(avg)
+        arr.push(avg >= 255 * 0.75 ? 3 : avg >= 255 * 0.5 ? 2 : avg >= 255 * 0.25 ? 1 : 0) // 提取指纹
     }
     const arr2d = [] // into 2d arr
     for (let i = 0; i < height; i++) {
@@ -66,7 +66,7 @@ function _getCtx2dData(frame = null, width = 0, height = 0) {
     return arr2d
 }
 
-function _compareImg(dataBig, data) { // 比较两张图 得出是否包含、所在位置
+function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所在位置
     const bigLen = dataBig.length, len = data.length
     const resData = []
     if (dataBig && data && bigLen > 0 && len > 0) {
@@ -98,5 +98,5 @@ function _compareImg(dataBig, data) { // 比较两张图 得出是否包含、�
     }
 }
 
-module.exports = {getPath, mockClick,_getCtx2dData,_compareImg};
+module.exports = {getPath, mockClick, _getCtx2dData, _compareImg};
 

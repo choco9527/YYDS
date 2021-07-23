@@ -33,7 +33,7 @@
         setInterval(() => {
             $canvas.fresh()
             $canvas.drawVideoImg()
-        }, 500)
+        }, 200)
     })();
 
     (function clearPage() { // 清理页面（关闭一些弹窗）
