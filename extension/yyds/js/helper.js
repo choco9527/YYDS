@@ -62,13 +62,12 @@ class HandleCanvas {
         this.initCanvas()
     }
 
-    initCanvas() { // 初始化canvas
+    initCanvas() {
         let canvasEle = document.createElement('canvas')
         canvasEle.id = 'yyds-canvas'
-        canvasEle.style.zIndex = '-999'
-        canvasEle.style.position = 'fixed'
-        canvasEle.style.bottom = '0'
-        canvasEle.style.left = '0'
+        canvasEle.style.display = 'none'
+        canvasEle.style.zIndex = '-100'
+        canvasEle.style.opacity = '0'
         canvasEle.width = this.viewWidth
         canvasEle.height = this.viewHeight
         document.body.appendChild(canvasEle)
