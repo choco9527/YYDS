@@ -29,7 +29,7 @@ const {getPath, mockClick, _getCtx2dData, _compareImg} = require('./js/tools');
                 'https://www.baidu.com',
                 'https://aso.youmi.net'
             ]
-            const url = urls[2]
+            const url = urls[1]
             await page1.goto(url);
             return Promise.resolve({page1, browser})
         }
@@ -71,11 +71,12 @@ const {getPath, mockClick, _getCtx2dData, _compareImg} = require('./js/tools');
                     })
                     if (postData.code + '' === '0') {
 
-                        // const bigData = await _getVideoData()
-                        // const smallData = await _getImageData('img/yys/USER2.png')
+                        const bigData = await _getVideoData()
+                        console.log(bigData);
+                        const smallData = await _getImageData('img/yys/USER2.png')
 
-                        const bigData = await _getImageData('img/test/yuhunbig.png')
-                        const smallData = await _getImageData('img/yys/BA-QI-DA-SHE.png')
+                        // const bigData = await _getImageData('img/test/interface.png')
+                        // const smallData = await _getImageData('img/yys/BA-QI-DA-SHE.png')
 
                         console.time()
                         const compareRes = await _compareImg(bigData, smallData)
@@ -95,7 +96,7 @@ const {getPath, mockClick, _getCtx2dData, _compareImg} = require('./js/tools');
             if (!type) return
             for (let i = 0; i < playingList.length; i++) {
                 const item = playingList[i]
-                if(item.type === type) {
+                if (item.type === type) {
                     clearInterval(item.intervalId) // 关闭监听
                     return
                 }
@@ -113,9 +114,25 @@ const {getPath, mockClick, _getCtx2dData, _compareImg} = require('./js/tools');
             return await page.evaluate(async () => {
                 const canvasEle = document.getElementById('yyds-canvas')
                 const ctx = canvasEle.getContext('2d')
-                ctx.imageSmoothingEnabled = false // 锐化
+                // ctx.imageSmoothingEnabled = false // 锐化
                 let frame = ctx.getImageData(0, 0, canvasEle.width, canvasEle.height);
-                const arr2d = await window._getCtx2dData(frame, canvasEle.width, canvasEle.height)
+                const _getCtx2dData = (frame = null, width = 0, height = 0) => {
+                    if (!frame) throw new Error('no frame')
+                    const data = frame.data
+                    const l = data.length;
+                    const arr = []
+                    for (let i = 0; i < l; i += 4) { // Gray scale
+                        const avg = ((data[i] + data[i + 1] + data[i + 2]) / 3) << 0;
+                        arr.push(avg)
+                    }
+                    const arr2d = [] // to 2d arr
+                    for (let i = 0; i < height; i++) {
+                        const a = arr.slice(i * width, (i + 1) * width)
+                        arr2d.push(a)
+                    }
+                    return arr2d
+                }
+                const arr2d = _getCtx2dData(frame, canvasEle.width, canvasEle.height)
                 return Promise.resolve(arr2d)
             })
         }
@@ -125,7 +142,7 @@ const {getPath, mockClick, _getCtx2dData, _compareImg} = require('./js/tools');
             const img = await loadImage(getPath(path))
             const canvas = createCanvas(img.width, img.height)
             const ctx = canvas.getContext('2d')
-            ctx.imageSmoothingEnabled = false // 锐化
+            // ctx.imageSmoothingEnabled = false // 锐化
             ctx.drawImage(img, 0, 0, img.width, img.height)
             let frame = ctx.getImageData(0, 0, img.width, img.height);
             return _getCtx2dData(frame, img.width, img.height)

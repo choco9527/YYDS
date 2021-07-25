@@ -56,11 +56,11 @@ function _getCtx2dData(frame = null, width = 0, height = 0) {
     const arr = []
     for (let i = 0; i < l; i += 4) { // Gray scale
         const avg = ((data[i] + data[i + 1] + data[i + 2]) / 3) << 0;
+        arr.push(avg)
         // arr.push(avg >= 255 * 0.75 ? 3 : avg >= 255 * 0.5 ? 2 : avg >= 255 * 0.25 ? 1 : 0) // 提取指纹
-        arr.push(avg >= 255 * 0.5 ? 1 : 0) // 提取指纹
-
+        // arr.push(avg >= 255 * 0.5 ? 1 : 0) // 提取指纹
     }
-    const arr2d = [] // into 2d arr
+    const arr2d = [] // to 2d arr
     for (let i = 0; i < height; i++) {
         const a = arr.slice(i * width, (i + 1) * width)
         arr2d.push(a)
@@ -70,15 +70,16 @@ function _getCtx2dData(frame = null, width = 0, height = 0) {
 
 function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所在位置
     const bigLen = dataBig.length, len = data.length
+    console.log(dataBig.length, data.length);
     const resData = []
     if (dataBig && data && bigLen > 0 && len > 0) {
         let j = 0
         for (let i = 0; i < bigLen; i++) {
             const rowBig = dataBig[i]
-            const stringBigRow = rowBig.join('-')
+            const stringBigRow = rowBig.join('')
             const row = data[j]
             if (row) {
-                const stringRow = row.join('-')
+                const stringRow = row.join('')
                 const idx = stringBigRow.indexOf(stringRow) // 图2的行出现在图1
                 if (idx > 0) {
                     resData.push([i, idx])
@@ -87,6 +88,8 @@ function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所�
             }
         }
         const resLen = resData.length
+        console.log(dataBig[0].length, data[0].length);
+        console.log(resData);
         if (resLen > (len / 2)) {
             const top = resData[~~(resLen / 2) + 1][0] // 图2距图1 top
             const left = resData[~~(resLen / 2) + 1][1] + data[0].length / 2

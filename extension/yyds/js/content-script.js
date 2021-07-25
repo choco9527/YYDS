@@ -1,13 +1,14 @@
 ﻿;$(document).ready(function () {
+    const phone = 18088812132 // 15013361330 18088812132
     const $canvas = new HandleCanvas();
 
     (function listenPage() { // 接受popup消息
         chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
+            const $e = new MyEvent($)
             if (res.code === 'yyds') {
                 const {cmd} = res
                 if (cmd === 'tab1') {
                     console.log('开始监听点击')
-                    const $e = new MyEvent($)
                     $('body').click(e => {
                         console.log(e);
                         $e.shrinkPoint(e.clientX, e.clientY)
@@ -19,7 +20,6 @@
                         $canvas.drawVideoImg()
                     }, 500)
                 } else if (cmd === 'tab3') {
-                    const $e = new MyEvent($)
                     console.log('开始事件通讯');
                     $e.emit({msg: 'close'})
                 }
@@ -43,6 +43,9 @@
                 if (ele.innerText === '阴阳师（ios+安卓）') {
                     const playEl = $(this).parent().next()
                     playEl.trigger('click')
+                    setTimeout(() => {
+                        $('.f14.input input').val(phone)
+                    }, 500)
                     clearInterval(closeSlide)
                     return false
                 }
