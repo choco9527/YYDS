@@ -15,11 +15,8 @@ const {getPath, mockClick, _getCtx2dData, _compareImg} = require('./js/tools');
             const extendUrl = 'extension/yyds'
             const options = {
                 headless: false,
-                args: [`--disable-extensions-except=${getPath(extendUrl)}`, "--window-position=0,0", `--window-size=980,700`],
-                defaultViewport: {
-                    width: 960,
-                    height: 540
-                },
+                args: [`--disable-extensions-except=${getPath(extendUrl)}`, "--window-position=0,0", `--window-size=960,700`],
+                defaultViewport: {width: 960, height: 540},
                 // devtools: true,
                 executablePath: process.env.CHROME_PATH
             }
@@ -32,7 +29,7 @@ const {getPath, mockClick, _getCtx2dData, _compareImg} = require('./js/tools');
                 'https://www.baidu.com',
                 'https://aso.youmi.net'
             ]
-            const url = urls[3]
+            const url = urls[2]
             await page1.goto(url);
             return Promise.resolve({page1, browser})
         }
@@ -45,7 +42,7 @@ const {getPath, mockClick, _getCtx2dData, _compareImg} = require('./js/tools');
                 if (p.url().includes('cg.163.com/run.html')) {
                     page = p
                 }
-                if (p.url().includes('youmi')) {
+                if (p.url().includes('baidu')) {
                     page = p
                 }
             }
@@ -75,9 +72,9 @@ const {getPath, mockClick, _getCtx2dData, _compareImg} = require('./js/tools');
                     if (postData.code + '' === '0') {
 
                         // const bigData = await _getVideoData()
-                        // const smallData = await _getImageData('img/yys/USER-CENTER.png')
+                        // const smallData = await _getImageData('img/yys/USER2.png')
 
-                        const bigData = await _getImageData('img/test/bigcanvas.png')
+                        const bigData = await _getImageData('img/test/yuhunbig.png')
                         const smallData = await _getImageData('img/yys/BA-QI-DA-SHE.png')
 
                         console.time()

@@ -56,7 +56,9 @@ function _getCtx2dData(frame = null, width = 0, height = 0) {
     const arr = []
     for (let i = 0; i < l; i += 4) { // Gray scale
         const avg = ((data[i] + data[i + 1] + data[i + 2]) / 3) << 0;
-        arr.push(avg >= 255 * 0.75 ? 3 : avg >= 255 * 0.5 ? 2 : avg >= 255 * 0.25 ? 1 : 0) // 提取指纹
+        // arr.push(avg >= 255 * 0.75 ? 3 : avg >= 255 * 0.5 ? 2 : avg >= 255 * 0.25 ? 1 : 0) // 提取指纹
+        arr.push(avg >= 255 * 0.5 ? 1 : 0) // 提取指纹
+
     }
     const arr2d = [] // into 2d arr
     for (let i = 0; i < height; i++) {

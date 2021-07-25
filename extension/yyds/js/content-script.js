@@ -1,4 +1,6 @@
 ﻿;$(document).ready(function () {
+    const $canvas = new HandleCanvas();
+
     (function listenPage() { // 接受popup消息
         chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
             if (res.code === 'yyds') {
@@ -12,7 +14,6 @@
                     })
                 } else if (cmd === 'tab2') {
                     console.log('listening video 2 canvas')
-                    const $canvas = new HandleCanvas()
                     setInterval(() => {
                         $canvas.fresh()
                         $canvas.drawVideoImg()
@@ -29,7 +30,6 @@
 
     (function drawVideoAuto() { // draw video 2 canvas
         console.log('listening video 2 canvas auto')
-        const $canvas = new HandleCanvas()
         setInterval(() => {
             $canvas.fresh()
             $canvas.drawVideoImg()
