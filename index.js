@@ -78,7 +78,7 @@ const {getPath, mockClick, _compareImg, _similarImg} = require('./js/tools');
 
         const playingList = []
         const pageMap = {
-            'yuhun': {path: 'img/yys/pages/zudui.png', x: 200, y: 400}
+            'yuhun': {path: 'img/yys/pages/yuhun_out.png', x: 200, y: 400}
         }
 
         async function playing(type = '') { // loop playing
@@ -102,7 +102,7 @@ const {getPath, mockClick, _compareImg, _similarImg} = require('./js/tools');
                 if (compareRes.isTrust) {
                     await mockClick({page, x: pageMap[type].x, y: pageMap[type].y})
                 }
-            }, 200)
+            }, 1500)
 
             playingList.push(item)
         }
