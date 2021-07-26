@@ -1,10 +1,10 @@
 ﻿;$(document).ready(function () {
-    const phone = 18088812132 // 15013361330 18088812132
+    const phone = 15013361330 // 15013361330 18088812132
+    const $e = new MyEvent($);
     const $canvas = new HandleCanvas();
 
     (function listenPage() { // 接受popup消息
         chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
-            const $e = new MyEvent($)
             if (res.code === 'yyds') {
                 const {cmd} = res
                 if (cmd === 'tab1') {
@@ -19,6 +19,9 @@
                 } else if (cmd === 'tab3') {
                     console.log('开始事件通讯');
                     $e.emit({msg: 'close'})
+                } else if (cmd === 'tab4') {
+                    console.log('开始御魂');
+                    $e.emit({msg: 'yuhun'})
                 }
             }
             sendResponse('ok')

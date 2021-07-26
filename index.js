@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer-core');
 const {createCanvas, loadImage} = require('canvas')
 const dotenv = require("dotenv")
 dotenv.config()
-const {getPath, mockClick, _getCtx2dData, _compareImg, _similarImg} = require('./js/tools');
+const {getPath, mockClick, _compareImg, _similarImg} = require('./js/tools');
 
 (async () => {
     try {
@@ -29,7 +29,7 @@ const {getPath, mockClick, _getCtx2dData, _compareImg, _similarImg} = require('.
                 'https://www.baidu.com',
                 'https://aso.youmi.net',
             ]
-            const url = urls[3]
+            const url = urls[1]
             await page1.goto(url);
             return Promise.resolve({page1, browser})
         }
@@ -58,7 +58,6 @@ const {getPath, mockClick, _getCtx2dData, _compareImg, _similarImg} = require('.
                 return
             }
             console.log('getPage-' + page.url());
-            await page.exposeFunction('_getCtx2dData', _getCtx2dData)
 
             page.on('request', async request => {
                 const {_headers} = request
@@ -70,26 +69,22 @@ const {getPath, mockClick, _getCtx2dData, _compareImg, _similarImg} = require('.
                         postData[arr[0]] = arr[1]
                     })
                     if (postData.code + '' === '0') {
-                        console.time()
-
-                        const videoData = await _getVideoData()
-                        const compareData = await _getImageData('img/test/testyoumi.png')
-                        const compareRes = _similarImg(videoData, compareData)
-                        console.log(compareRes);
-
-                        console.timeEnd()
-                        if (compareRes.isTrust) {
-                            await mockClick({page, x: 200, y: 200})
-                        }
+                        console.log(postData);
+                        await playing(postData.msg)
                     }
                 }
             })
         }
 
         const playingList = []
+        const pageMap = {
+            'yuhun': {path: 'img/yys/pages/zudui.png', x: 200, y: 400}
+        }
 
         async function playing(type = '') { // loop playing
             if (!type) return
+            const item = {type, play: true}
+
             for (let i = 0; i < playingList.length; i++) {
                 const item = playingList[i]
                 if (item.type === type) {
@@ -97,22 +92,27 @@ const {getPath, mockClick, _getCtx2dData, _compareImg, _similarImg} = require('.
                     return
                 }
             }
+            if (!pageMap[type]) throw new Error('no this type')
 
-            const intervalId = setInterval(() => {
-
+            item.intervalId = setInterval(async () => {
+                const videoData = await _getVideoData()
+                const compareData = await _getImageData(pageMap[type].path)
+                const compareRes = _similarImg(videoData, compareData)
+                console.log(compareRes);
+                if (compareRes.isTrust) {
+                    await mockClick({page, x: pageMap[type].x, y: pageMap[type].y})
+                }
             }, 200)
 
-            playingList.push({type, play: true, intervalId})
-            const res = {imgPath: ''}
+            playingList.push(item)
         }
 
         async function _getVideoData() {
             return await page.evaluate(async () => {
                 const canvasEle = document.getElementById('yyds-canvas')
                 const ctx = canvasEle.getContext('2d')
-                // ctx.imageSmoothingEnabled = false // 锐化
+                ctx.imageSmoothingEnabled = false // 锐化
                 let frame = ctx.getImageData(0, 0, canvasEle.width, canvasEle.height);
-                // const arr2d = _getCtx2dData(frame, canvasEle.width, canvasEle.height)
                 const arr = Array.from(frame.data)
                 return Promise.resolve(arr)
             })
@@ -121,11 +121,11 @@ const {getPath, mockClick, _getCtx2dData, _compareImg, _similarImg} = require('.
         async function _getImageData(path = '', scale = false) {
             if (!path) throw new Error('no path')
             const img = await loadImage(getPath(path))
-            const k = 5
+            const k = 4
             const width = img.width / k, height = img.height / k
             const canvas = createCanvas(width, height)
             const ctx = canvas.getContext('2d')
-            // ctx.imageSmoothingEnabled = false // 锐化
+            ctx.imageSmoothingEnabled = false // 锐化
             ctx.drawImage(img, 0, 0, width, height)
             let frame = ctx.getImageData(0, 0, width, height);
             return frame.data

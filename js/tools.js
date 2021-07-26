@@ -18,13 +18,11 @@ function getCircleArea(x = 0, y = 0, r = 10) { // get area by xy for circle
 async function mockClick({page = null, x = 0, y = 0}) { // a new click loop
     console.log('a new click loop')
     console.time()
-
     const click = async () => { // just once click
         const {cX, cY} = getCircleArea(x, y)
         console.log('click:', x + cX, y + cY)
         await page.mouse.click(x + cX, y + cY, {delay: randomNumber(0, 10)})
     }
-
     const loopClick = async (loopClickTimes = 1) => {
         // create loopClick
         if (loopClickTimes < 1) return
@@ -71,7 +69,7 @@ function _getCtx2dData(frame = null, width = 0, height = 0) {
 function _similarImg(data1, data2) { // 计算相似度
     if (!data1 || !data2) throw new Error('no img')
     const len1 = data1.length, len2 = data2.length
-    let count = 0, deviation = 20
+    let count = 0, deviation = 5
     for (let i = 0; i < len1; i++) {
         if (data1[i] === data2[i]) {
             count++
@@ -80,7 +78,7 @@ function _similarImg(data1, data2) { // 计算相似度
         }
     }
 
-    return {isTrust: count > len1 * 0.9,count}
+    return {isTrust: count > len1 * 0.7, k: count / data1.length}
 }
 
 function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所在位置
@@ -115,5 +113,5 @@ function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所�
     }
 }
 
-module.exports = {getPath, mockClick, _getCtx2dData, _compareImg, _similarImg};
+module.exports = {getPath, mockClick, _compareImg, _similarImg};
 

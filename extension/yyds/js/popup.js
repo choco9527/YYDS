@@ -9,4 +9,7 @@ $(document).ready(function () {
     $('.tab3').click((e) => {
         $sendMessageToContentScript({cmd: 'tab3'}, (response) => console.log(response));
     })
+    $('.tab4').click((e) => {
+        $sendMessageToContentScript({cmd: 'tab4'}, (response) => console.log(response));
+    })
 })

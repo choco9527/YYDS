@@ -60,17 +60,17 @@ class HandleCanvas {
         this.viewWidth = 960
         this.viewHeight = 540
         this.initCanvas()
-        this.k = 5
     }
 
     initCanvas() {
+        const k = 4
         let canvasEle = document.createElement('canvas')
         canvasEle.id = 'yyds-canvas'
         canvasEle.style.display = 'none'
         canvasEle.style.zIndex = '-100'
         canvasEle.style.opacity = '0'
-        canvasEle.width = this.viewWidth / this.k
-        canvasEle.height = this.viewHeight / this.k
+        canvasEle.width = this.viewWidth / k
+        canvasEle.height = this.viewHeight /k
         document.body.appendChild(canvasEle)
         this.canvasEle = canvasEle
     }
@@ -102,7 +102,6 @@ class HandleCanvas {
 
         if (!this.canvasEle) {
             this.initCanvas()
-            return
         }
     }
 
@@ -110,7 +109,7 @@ class HandleCanvas {
         // draw video into canvas
         if (this.videoEle && this.canvasEle) {
             const ctx = this.canvasEle.getContext('2d')
-            // ctx.imageSmoothingEnabled = false // 锐化
+            ctx.imageSmoothingEnabled = false // 锐化
             ctx.drawImage(this.videoEle, 0, 0, this.canvasEle.width, this.canvasEle.height)
         }
     }
