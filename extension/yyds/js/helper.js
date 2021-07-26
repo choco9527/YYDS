@@ -60,6 +60,7 @@ class HandleCanvas {
         this.viewWidth = 960
         this.viewHeight = 540
         this.initCanvas()
+        this.k = 5
     }
 
     initCanvas() {
@@ -68,27 +69,29 @@ class HandleCanvas {
         canvasEle.style.display = 'none'
         canvasEle.style.zIndex = '-100'
         canvasEle.style.opacity = '0'
-        canvasEle.width = this.viewWidth
-        canvasEle.height = this.viewHeight
+        canvasEle.width = this.viewWidth / this.k
+        canvasEle.height = this.viewHeight / this.k
         document.body.appendChild(canvasEle)
         this.canvasEle = canvasEle
     }
 
-    setCanvas() { // set canvas width height
-        if (!this.videoEle || !this.canvasEle) return
-        let videoWidth = this.videoEle.width || this.videoEle.clientWidth
-        let videoHeight = this.videoEle.height || this.videoEle.clientHeight
-        if (this.canvasEle.width !== videoWidth || this.canvasEle.height !== videoHeight) {
-            this.canvasEle.width = videoWidth
-            this.canvasEle.height = videoHeight
+    createNewCanvas() { // 画一幅原始尺寸的画
+        let newCanvas = document.getElementById('yyds-origin-canvas')
+        if (!newCanvas) {
+            newCanvas = document.createElement('canvas')
+            newCanvas.id = 'yyds-origin-canvas'
+            newCanvas.style.zIndex = '100'
+            newCanvas.style.position = 'fixed'
+            newCanvas.style.top = '0'
+            newCanvas.style.left = '0'
+            newCanvas.width = this.viewWidth
+            newCanvas.height = this.viewHeight
+            newCanvas.style.display = 'block'
+            document.body.appendChild(newCanvas)
         }
-    }
-
-    freshVideo() {
-        this.videoEle.style.width = this.viewWidth + 'px'
-        this.videoEle.style.height = this.viewHeight + 'px'
-        this.videoEle.width = this.viewWidth
-        this.videoEle.height = this.viewHeight
+        newCanvas.style.display = newCanvas.style.display === 'none' ? 'block' : 'none'
+        const ctx = newCanvas.getContext('2d')
+        ctx.drawImage(this.videoEle, 0, 0, newCanvas.width, newCanvas.height)
     }
 
     fresh() {
@@ -108,8 +111,7 @@ class HandleCanvas {
         if (this.videoEle && this.canvasEle) {
             const ctx = this.canvasEle.getContext('2d')
             // ctx.imageSmoothingEnabled = false // 锐化
-            ctx.drawImage(this.videoEle, 0, 0, this.canvimageSmoothingEnabledasEle.width, this.canvasEle.height)
-            return {width: this.canvasEle.width, height: this.canvasEle.height}
+            ctx.drawImage(this.videoEle, 0, 0, this.canvasEle.width, this.canvasEle.height)
         }
     }
 }

@@ -14,11 +14,8 @@
                         $e.shrinkPoint(e.clientX, e.clientY)
                     })
                 } else if (cmd === 'tab2') {
-                    console.log('listening video 2 canvas')
-                    setInterval(() => {
-                        $canvas.fresh()
-                        $canvas.drawVideoImg()
-                    }, 500)
+                    console.log('draw video 2 canvas')
+                    $canvas.createNewCanvas()
                 } else if (cmd === 'tab3') {
                     console.log('开始事件通讯');
                     $e.emit({msg: 'close'})

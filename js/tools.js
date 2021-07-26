@@ -68,9 +68,23 @@ function _getCtx2dData(frame = null, width = 0, height = 0) {
     return arr2d
 }
 
+function _similarImg(data1, data2) { // 计算相似度
+    if (!data1 || !data2) throw new Error('no img')
+    const len1 = data1.length, len2 = data2.length
+    let count = 0, deviation = 20
+    for (let i = 0; i < len1; i++) {
+        if (data1[i] === data2[i]) {
+            count++
+        } else if (-deviation < data1[i] - data2[i] && data1[i] - data2[i] < deviation) {
+            count++
+        }
+    }
+
+    return {isTrust: count > len1 * 0.9,count}
+}
+
 function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所在位置
     const bigLen = dataBig.length, len = data.length
-    console.log(dataBig.length, data.length);
     const resData = []
     if (dataBig && data && bigLen > 0 && len > 0) {
         let j = 0
@@ -88,8 +102,6 @@ function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所�
             }
         }
         const resLen = resData.length
-        console.log(dataBig[0].length, data[0].length);
-        console.log(resData);
         if (resLen > (len / 2)) {
             const top = resData[~~(resLen / 2) + 1][0] // 图2距图1 top
             const left = resData[~~(resLen / 2) + 1][1] + data[0].length / 2
@@ -103,5 +115,5 @@ function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所�
     }
 }
 
-module.exports = {getPath, mockClick, _getCtx2dData, _compareImg};
+module.exports = {getPath, mockClick, _getCtx2dData, _compareImg, _similarImg};
 
