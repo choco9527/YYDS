@@ -141,5 +141,5 @@ function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所�
     }
 }
 
-module.exports = {getPath, mockClick, _parsePostData, _similarImg};
+module.exports = {getPath, mockClick, _parsePostData, _similarImg, randn_bm};
 

@@ -5,7 +5,7 @@ puppeteer.use(StealthPlugin())
 const {createCanvas, loadImage} = require('canvas')
 const dotenv = require("dotenv")
 dotenv.config()
-const {getPath, mockClick, _parsePostData, _similarImg} = require('./js/tools');
+const {getPath, mockClick, _parsePostData, _similarImg, randn_bm} = require('./js/tools');
 const {pageMap} = require('./js/map');
 (async () => {
     try {
@@ -106,7 +106,7 @@ const {pageMap} = require('./js/map');
                     console.log(compareRes)
                     if (compareRes.simi > pItem.simi) {
                         console.log(pItem.name);
-                        let index = Math.floor((Math.random() * pItem.clickMap.length))
+                        let index = Math.floor((randn_bm() * pItem.clickMap.length))
                         const {x, y} = pItem.clickMap[index]
                         await mockClick({page, x, y, clickTimes: pItem.clickTimes, r: pItem.r})
                     }
