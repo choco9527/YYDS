@@ -12,7 +12,7 @@ const pageMap = {
             name: '御魂11选择页（单刷）',
             path: 'img/yys/pages/yuhun/yuhun11.png',
             clickMap: [{x: 870, y: 485}],
-            clickTimes: 3,
+            clickTimes: 2,
             simi: 0.6,
             r: 20
         },
