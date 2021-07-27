@@ -1,5 +1,4 @@
 ﻿;$(document).ready(function () {
-    const phone = 15013361330 // 15013361330 18088812132
     const $e = new MyEvent($);
     const $canvas = new HandleCanvas();
 
@@ -18,10 +17,10 @@
                     $canvas.createNewCanvas()
                 } else if (cmd === 'tab3') {
                     console.log('开始事件通讯');
-                    $e.emit({msg: 'close'})
+                    $e.emit({msg: 'start'})
                 } else if (cmd === 'tab4') {
                     console.log('开始御魂');
-                    $e.emit({msg: 'yuhun'})
+                    $e.emit({msg: 'yuhun', type: 'play'})
                 }
             }
             sendResponse('ok')
@@ -43,9 +42,7 @@
                 if (ele.innerText === '阴阳师（ios+安卓）') {
                     const playEl = $(this).parent().next()
                     playEl.trigger('click')
-                    setTimeout(() => {
-                        $('.f14.input input').val(phone)
-                    }, 500)
+                    $e.emit({type: 'pageHandle', msg: 'inputPhone'})
                     clearInterval(closeSlide)
                     return false
                 }

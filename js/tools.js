@@ -113,5 +113,18 @@ function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所�
     }
 }
 
-module.exports = {getPath, mockClick, _compareImg, _similarImg};
+function _parsePostData(request) {
+    const {_headers} = request
+    if (_headers['custom-info'] === 'yyds') {
+        const postData = {}
+        request.postData().split('&').forEach(item => {
+            const arr = item.split('=')
+            postData[arr[0]] = arr[1]
+        })
+        return postData
+    }
+    return null
+}
+
+module.exports = {getPath, mockClick, _parsePostData, _similarImg};
 

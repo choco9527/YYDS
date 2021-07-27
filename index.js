@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer-core');
 const {createCanvas, loadImage} = require('canvas')
 const dotenv = require("dotenv")
 dotenv.config()
-const {getPath, mockClick, _compareImg, _similarImg} = require('./js/tools');
+const {getPath, mockClick, _parsePostData, _similarImg} = require('./js/tools');
 
 (async () => {
     try {
@@ -31,6 +31,16 @@ const {getPath, mockClick, _compareImg, _similarImg} = require('./js/tools');
             ]
             const url = urls[1]
             await page1.goto(url);
+            page1.on('request', async request => {
+                const postData = _parsePostData(request)
+                if (postData && postData.code + '' === '0' && postData.type === 'pageHandle') {
+                    if (postData.msg === 'inputPhone' && process.env.PHONE) { // 输入手机号
+                        await page1.mouse.click(495, 295)
+                        await page1.keyboard.type(process.env.PHONE, {delay: 100})
+                        await page1.mouse.click(480, 365)
+                    }
+                }
+            })
             return Promise.resolve({page1, browser})
         }
 
@@ -39,10 +49,7 @@ const {getPath, mockClick, _compareImg, _similarImg} = require('./js/tools');
             for (let i = 0; i < pages.length; i++) {
                 const p = pages[i]
                 if (p.url() === 'about:blank') await p.close()
-                if (p.url().includes('cg.163.com/run.html')) {
-                    page = p
-                }
-                if (p.url().includes('youmi')) {
+                if (p.url().includes('cg.163.com/run.html') || p.url().includes('youmi')) {
                     page = p
                 }
             }
@@ -60,16 +67,9 @@ const {getPath, mockClick, _compareImg, _similarImg} = require('./js/tools');
             console.log('getPage-' + page.url());
 
             page.on('request', async request => {
-                const {_headers} = request
-                if (_headers['custom-info'] === 'yyds') {
-
-                    const postData = {}
-                    request.postData().split('&').forEach(item => {
-                        const arr = item.split('=')
-                        postData[arr[0]] = arr[1]
-                    })
-                    if (postData.code + '' === '0') {
-                        console.log(postData);
+                const postData = _parsePostData(request)
+                if (postData && postData.code + '' === '0') {
+                    if (postData.type === 'play') {
                         await playing(postData.msg)
                     }
                 }
@@ -78,7 +78,7 @@ const {getPath, mockClick, _compareImg, _similarImg} = require('./js/tools');
 
         const playingList = []
         const pageMap = {
-            'yuhun': {path: 'img/yys/pages/yuhun_out.png', x: 200, y: 400}
+            'yuhun': [{name: '御魂选择页', path: 'img/yys/pages/yuhun_out.png', x: 200, y: 320}]
         }
 
         async function playing(type = '') { // loop playing
@@ -96,11 +96,13 @@ const {getPath, mockClick, _compareImg, _similarImg} = require('./js/tools');
 
             item.intervalId = setInterval(async () => {
                 const videoData = await _getVideoData()
-                const compareData = await _getImageData(pageMap[type].path)
-                const compareRes = _similarImg(videoData, compareData)
-                console.log(compareRes);
-                if (compareRes.isTrust) {
-                    await mockClick({page, x: pageMap[type].x, y: pageMap[type].y})
+                for (let i = 0; i < pageMap[type].length; i++) {
+                    const compareData = await _getImageData(pageMap[type][i].path)
+                    const compareRes = _similarImg(videoData, compareData)
+                    console.log(pageMap[type][i].name, compareRes);
+                    if (compareRes.isTrust) {
+                        await mockClick({page, x: pageMap[type].x, y: pageMap[type].y})
+                    }
                 }
             }, 1500)
 

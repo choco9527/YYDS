@@ -9,7 +9,7 @@ class MyEvent {
         this.$.ajax({
             url: 'http://localhost:6699', // any port
             dataType: 'json',
-            data: Object.assign({code: 0}, params),
+            data: Object.assign({code: 0, type: ''}, params),
             headers: {'custom-info': 'yyds'},
             timeout: 1,
             type: 'post',
@@ -70,7 +70,7 @@ class HandleCanvas {
         canvasEle.style.zIndex = '-100'
         canvasEle.style.opacity = '0'
         canvasEle.width = this.viewWidth / k
-        canvasEle.height = this.viewHeight /k
+        canvasEle.height = this.viewHeight / k
         document.body.appendChild(canvasEle)
         this.canvasEle = canvasEle
     }

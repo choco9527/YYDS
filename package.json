@@ -10,7 +10,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "run": "node index.js"
+    "local": "node index.js"
   },
   "keywords": [
     "yyds"
