@@ -27,12 +27,12 @@
         });
     })();
 
-    (function drawVideoAuto() { // draw video 2 canvas
+    (function drawVideoAuto() { // draw video 2 canvas auto
         console.log('listening video 2 canvas auto')
         setInterval(() => {
             $canvas.fresh()
             $canvas.drawVideoImg()
-        }, 200)
+        }, 600)
     })();
 
     (function clearPage() { // 清理页面（关闭一些弹窗）

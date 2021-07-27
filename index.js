@@ -78,8 +78,17 @@ const {getPath, mockClick, _parsePostData, _similarImg} = require('./js/tools');
 
         const playingList = []
         const pageMap = {
-            'yuhun': [{name: '御魂选择页', path: 'img/yys/pages/yuhun_out.png', x: 200, y: 320, clickTimes: 1},
-                {name: '御魂组队页', path: 'img/yys/pages/zudui.png', x: 200, y: 320, clickTimes: 1}]
+            'yuhun': [{
+                name: '御魂选择页',
+                path: 'img/yys/pages/yuhun/yuhun_out.png',
+                x: 200,
+                y: 320,
+                clickTimes: 1,
+                simi: 0.6
+            },
+                {name: '挑战选择页（单刷）', path: 'img/yys/pages/yuhun/select.png', x: 870, y: 485, clickTimes: 3, simi: 0.7},
+                {name: '御魂组队页', path: 'img/yys/pages/yuhun/zudui.png', x: 200, y: 320, clickTimes: 1, simi: 0.7},
+                {name: '御魂结束页', path: 'img/yys/pages/yuhun/finish.png', x: 700, y: 400, clickTimes: 5, simi: 0.45}]
         }
 
         async function playing(type = '') { // loop playing
@@ -89,6 +98,7 @@ const {getPath, mockClick, _parsePostData, _similarImg} = require('./js/tools');
             for (let i = 0; i < playingList.length; i++) {
                 const item = playingList[i]
                 if (item.type === type) {
+                    console.log(type + '-停止')
                     clearInterval(item.intervalId) // 关闭监听
                     return
                 }
@@ -101,12 +111,13 @@ const {getPath, mockClick, _parsePostData, _similarImg} = require('./js/tools');
                     const pItem = pageMap[type][i]
                     const compareData = await _getImageData(pItem.path)
                     const compareRes = _similarImg(videoData, compareData)
-                    console.log(pItem.name, compareRes);
-                    if (compareRes.isTrust) {
+                    console.log(compareRes)
+                    if (compareRes.simi > pItem.simi) {
+                        console.log(pItem.name);
                         await mockClick({page, x: pItem.x, y: pItem.y, clickTimes: pItem.clickTimes})
                     }
                 }
-            }, 1500)
+            }, 2500)
 
             playingList.push(item)
         }

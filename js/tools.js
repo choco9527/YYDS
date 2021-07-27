@@ -58,7 +58,7 @@ function _similarImg(data1, data2, deviation = 5) { // 计算相似度 误差值
         }
     }
 
-    return {isTrust: count > len1 * 0.7, k: count / data1.length}
+    return { simi: count / data1.length}
 }
 
 function _parsePostData(request) {
