@@ -1,9 +1,12 @@
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth')
+puppeteer.use(StealthPlugin())
+
 const {createCanvas, loadImage} = require('canvas')
 const dotenv = require("dotenv")
 dotenv.config()
 const {getPath, mockClick, _parsePostData, _similarImg} = require('./js/tools');
-
+const {pageMap} = require('./js/map');
 (async () => {
     try {
         const {browser} = await openIt() // 打开页面
@@ -18,7 +21,8 @@ const {getPath, mockClick, _parsePostData, _similarImg} = require('./js/tools');
                 args: [`--disable-extensions-except=${getPath(extendUrl)}`, "--window-position=0,0", `--window-size=960,700`],
                 defaultViewport: {width: 960, height: 540},
                 // devtools: true,
-                executablePath: process.env.CHROME_PATH
+                executablePath: process.env.CHROME_PATH,
+                ignoreDefaultArgs: ["--enable-automation"]
             }
             const browser = await puppeteer.launch(options);
             const page1 = await browser.newPage();
@@ -28,8 +32,9 @@ const {getPath, mockClick, _parsePostData, _similarImg} = require('./js/tools');
                 'https://cg.163.com/#/search?key=%E9%98%B4%E9%98%B3%E5%B8%88', // 阴阳师
                 'https://www.baidu.com',
                 'https://aso.youmi.net',
+                'https://bot.sannysoft.com'
             ]
-            const url = urls[1]
+            const url = urls[4]
             await page1.goto(url);
             page1.on('request', async request => {
                 const postData = _parsePostData(request)
@@ -77,19 +82,6 @@ const {getPath, mockClick, _parsePostData, _similarImg} = require('./js/tools');
         }
 
         const playingList = []
-        const pageMap = {
-            'yuhun': [{
-                name: '御魂选择页',
-                path: 'img/yys/pages/yuhun/yuhun_out.png',
-                x: 200,
-                y: 320,
-                clickTimes: 1,
-                simi: 0.6
-            },
-                {name: '挑战选择页（单刷）', path: 'img/yys/pages/yuhun/select.png', x: 870, y: 485, clickTimes: 3, simi: 0.7},
-                {name: '御魂组队页', path: 'img/yys/pages/yuhun/zudui.png', x: 200, y: 320, clickTimes: 1, simi: 0.7},
-                {name: '御魂结束页', path: 'img/yys/pages/yuhun/finish.png', x: 700, y: 400, clickTimes: 5, simi: 0.45}]
-        }
 
         async function playing(type = '') { // loop playing
             if (!type) return

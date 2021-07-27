@@ -1,6 +1,9 @@
 ﻿;$(document).ready(function () {
     const $e = new MyEvent($);
     const $canvas = new HandleCanvas();
+    Object.defineProperty(navigator, 'webdriver', {
+        get: () => false,
+    });
 
     (function listenPage() { // 接受popup消息
         chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
