@@ -15,7 +15,7 @@ function getCircleArea(x = 0, y = 0, r = 10) { // get area by xy for circle
     return {cX, cY}
 }
 
-async function mockClick({page = null, x = 0, y = 0}) { // a new click loop
+async function mockClick({page = null, x = 0, y = 0, clickTimes = 1}) { // a new click loop
     console.log('a new click loop')
     console.time()
     const click = async () => { // just once click
@@ -41,13 +41,40 @@ async function mockClick({page = null, x = 0, y = 0}) { // a new click loop
         }
         console.log(timing);
     }
-    await loopClick(3)
+    await loopClick(clickTimes)
     console.timeEnd() // 一轮点击时长 = 次数：loopClickTimes × (频率：frequency + 点击延时：delay)
     return Promise.resolve('success')
 }
 
+function _similarImg(data1, data2, deviation = 5) { // 计算相似度 误差值
+    if (!data1 || !data2) throw new Error('no img')
+    const len1 = data1.length, len2 = data2.length
+    let count = 0
+    for (let i = 0; i < len1; i++) {
+        if (data1[i] === data2[i]) {
+            count++
+        } else if (-deviation < data1[i] - data2[i] && data1[i] - data2[i] < deviation) { // 误差容错
+            count++
+        }
+    }
 
-function _getCtx2dData(frame = null, width = 0, height = 0) {
+    return {isTrust: count > len1 * 0.7, k: count / data1.length}
+}
+
+function _parsePostData(request) {
+    const {_headers} = request
+    if (_headers['custom-info'] === 'yyds') {
+        const postData = {}
+        request.postData().split('&').forEach(item => {
+            const arr = item.split('=')
+            postData[arr[0]] = arr[1]
+        })
+        return postData
+    }
+    return null
+}
+
+function _getCtx2dData(frame = null, width = 0, height = 0) { // 转为2维数组 废弃
     if (!frame) throw new Error('no frame')
     const data = frame.data
     const l = data.length;
@@ -66,22 +93,7 @@ function _getCtx2dData(frame = null, width = 0, height = 0) {
     return arr2d
 }
 
-function _similarImg(data1, data2) { // 计算相似度
-    if (!data1 || !data2) throw new Error('no img')
-    const len1 = data1.length, len2 = data2.length
-    let count = 0, deviation = 5
-    for (let i = 0; i < len1; i++) {
-        if (data1[i] === data2[i]) {
-            count++
-        } else if (-deviation < data1[i] - data2[i] && data1[i] - data2[i] < deviation) {
-            count++
-        }
-    }
-
-    return {isTrust: count > len1 * 0.7, k: count / data1.length}
-}
-
-function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所在位置
+function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所在位置（废弃）
     const bigLen = dataBig.length, len = data.length
     const resData = []
     if (dataBig && data && bigLen > 0 && len > 0) {
@@ -111,19 +123,6 @@ function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所�
     } else {
         throw new Error('no data')
     }
-}
-
-function _parsePostData(request) {
-    const {_headers} = request
-    if (_headers['custom-info'] === 'yyds') {
-        const postData = {}
-        request.postData().split('&').forEach(item => {
-            const arr = item.split('=')
-            postData[arr[0]] = arr[1]
-        })
-        return postData
-    }
-    return null
 }
 
 module.exports = {getPath, mockClick, _parsePostData, _similarImg};

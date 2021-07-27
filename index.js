@@ -78,7 +78,8 @@ const {getPath, mockClick, _parsePostData, _similarImg} = require('./js/tools');
 
         const playingList = []
         const pageMap = {
-            'yuhun': [{name: '御魂选择页', path: 'img/yys/pages/yuhun_out.png', x: 200, y: 320}]
+            'yuhun': [{name: '御魂选择页', path: 'img/yys/pages/yuhun_out.png', x: 200, y: 320, clickTimes: 1},
+                {name: '御魂组队页', path: 'img/yys/pages/zudui.png', x: 200, y: 320, clickTimes: 1}]
         }
 
         async function playing(type = '') { // loop playing
@@ -97,11 +98,12 @@ const {getPath, mockClick, _parsePostData, _similarImg} = require('./js/tools');
             item.intervalId = setInterval(async () => {
                 const videoData = await _getVideoData()
                 for (let i = 0; i < pageMap[type].length; i++) {
-                    const compareData = await _getImageData(pageMap[type][i].path)
+                    const pItem = pageMap[type][i]
+                    const compareData = await _getImageData(pItem.path)
                     const compareRes = _similarImg(videoData, compareData)
-                    console.log(pageMap[type][i].name, compareRes);
+                    console.log(pItem.name, compareRes);
                     if (compareRes.isTrust) {
-                        await mockClick({page, x: pageMap[type].x, y: pageMap[type].y})
+                        await mockClick({page, x: pItem.x, y: pItem.y, clickTimes: pItem.clickTimes})
                     }
                 }
             }, 1500)
