@@ -73,10 +73,8 @@ const {pageMap} = require('./js/map');
 
             page.on('request', async request => {
                 const postData = _parsePostData(request)
-                if (postData && postData.code + '' === '0') {
-                    if (postData.type === 'play') {
-                        await playing(postData.msg)
-                    }
+                if (postData && postData.code + '' === '0' && postData.type === 'play') {
+                    await playing(postData.msg)
                 }
             })
         }

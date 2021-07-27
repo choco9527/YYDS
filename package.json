@@ -17,5 +17,6 @@
     "yyds"
   ],
   "author": "choco",
-  "license": "ISC"
+  "license": "ISC",
+  "private": "true"
 }
