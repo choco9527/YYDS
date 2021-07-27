@@ -34,7 +34,7 @@ const {pageMap} = require('./js/map');
                 'https://aso.youmi.net',
                 'https://bot.sannysoft.com'
             ]
-            const url = urls[4]
+            const url = urls[1]
             await page1.goto(url);
             page1.on('request', async request => {
                 const postData = _parsePostData(request)
@@ -90,6 +90,7 @@ const {pageMap} = require('./js/map');
                 if (item.type === type) {
                     console.log(type + '-停止')
                     clearInterval(item.intervalId) // 关闭监听
+                    playingList.splice(i,1)
                     return
                 }
             }
@@ -101,7 +102,7 @@ const {pageMap} = require('./js/map');
                     const pItem = pageMap[type][i]
                     const compareData = await _getImageData(pItem.path)
                     const compareRes = _similarImg(videoData, compareData)
-                    console.log(compareRes)
+                    console.log(compareRes);
                     if (compareRes.simi > pItem.simi) {
                         console.log(pItem.name);
                         let index = Math.floor((randn_bm() * pItem.clickMap.length))

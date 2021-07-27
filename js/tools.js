@@ -10,16 +10,16 @@ function randomNumber(min = 0, max = 0, Int = true) // random Int / Float
 
 function randn_bm() { // 取 0-1 服从正态分布
     let u = 0, v = 0;
-    while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
-    while(v === 0) v = Math.random();
-    let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+    while (v === 0) v = Math.random();
+    let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
     num = num / 10.0 + 0.5; // Translate to 0 -> 1
     if (num > 1 || num < 0) return randn_bm(); // resample between 0 and 1
     return num;
 }
 
 function randomNumber_mb(min = 0, max = 0) { // 服从正态分布的随机取值
-    return  Math.floor(randn_bm() * (max - min + 1) + min)
+    return Math.floor(randn_bm() * (max - min + 1) + min)
 }
 
 function getCircleArea(r = 10) { // get area by xy for circle
@@ -66,7 +66,7 @@ function _similarImg(data1, data2, deviation = 5) { // 计算相似度 误差值
     if (!data1 || !data2) throw new Error('no img')
     const len1 = data1.length, len2 = data2.length
     let count = 0
-    for (let i = 0; i < len1; i++) {
+    for (let i = ~~(len1 / 2); i < len1; i++) {
         if (data1[i] === data2[i]) {
             count++
         } else if (-deviation < data1[i] - data2[i] && data1[i] - data2[i] < deviation) { // 误差容错
@@ -74,7 +74,7 @@ function _similarImg(data1, data2, deviation = 5) { // 计算相似度 误差值
         }
     }
 
-    return {simi: count / data1.length}
+    return {simi: count / (len1 / 2)}
 }
 
 function _parsePostData(request) {
