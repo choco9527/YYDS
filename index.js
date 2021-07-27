@@ -106,7 +106,9 @@ const {pageMap} = require('./js/map');
                     console.log(compareRes)
                     if (compareRes.simi > pItem.simi) {
                         console.log(pItem.name);
-                        await mockClick({page, x: pItem.x, y: pItem.y, clickTimes: pItem.clickTimes})
+                        let index = Math.floor((Math.random() * pItem.clickMap.length))
+                        const {x, y} = pItem.clickMap[index]
+                        await mockClick({page, x, y, clickTimes: pItem.clickTimes, r: pItem.r})
                     }
                 }
             }, 2500)
@@ -115,14 +117,14 @@ const {pageMap} = require('./js/map');
         }
 
         async function _getVideoData() {
-            return await page.evaluate(async () => {
+            return page.evaluate(async () => {
                 const canvasEle = document.getElementById('yyds-canvas')
                 const ctx = canvasEle.getContext('2d')
                 ctx.imageSmoothingEnabled = false // 锐化
                 let frame = ctx.getImageData(0, 0, canvasEle.width, canvasEle.height);
                 const arr = Array.from(frame.data)
                 return Promise.resolve(arr)
-            })
+            });
         }
 
         async function _getImageData(path = '', scale = false) {

@@ -4,7 +4,7 @@
     Object.defineProperty(navigator, 'webdriver', {
         get: () => false,
     });
-
+    let time = 0;
     (function listenPage() { // 接受popup消息
         chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
             if (res.code === 'yyds') {
@@ -12,7 +12,9 @@
                 if (cmd === 'tab1') {
                     console.log('开始监听点击')
                     $('body').click(e => {
-                        console.log(e);
+                        const now = Date.now()
+                        console.log('click_body', now - time);
+                        time = now
                         $e.shrinkPoint(e.clientX, e.clientY)
                     })
                 } else if (cmd === 'tab2') {

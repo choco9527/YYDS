@@ -8,29 +8,40 @@ function randomNumber(min = 0, max = 0, Int = true) // random Int / Float
         Math.random() * (max - min) + min
 }
 
-function getCircleArea(x = 0, y = 0, r = 10) { // get area by xy for circle
-    const cX = randomNumber(-r, r) // x position
+function randn_bm() { // 取 0-1 服从正态分布
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+    while(v === 0) v = Math.random();
+    let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    num = num / 10.0 + 0.5; // Translate to 0 -> 1
+    if (num > 1 || num < 0) return randn_bm(); // resample between 0 and 1
+    return num;
+}
+
+function randomNumber_mb(min = 0, max = 0) { // 服从正态分布的随机取值
+    return  Math.floor(randn_bm() * (max - min + 1) + min)
+}
+
+function getCircleArea(r = 10) { // get area by xy for circle
+    const cX = randomNumber_mb(-r, r) // x position
     const maxY = Math.sqrt(r * r - cX * cX) //  -maxY —— +maxY
-    const cY = randomNumber(-maxY, maxY)
+    const cY = randomNumber_mb(-maxY, maxY)
     return {cX, cY}
 }
 
-async function mockClick({page = null, x = 0, y = 0, clickTimes = 1}) { // a new click loop
+async function mockClick({page = null, x = 0, y = 0, clickTimes = 1, r = 10}) { // a new click loop
     console.log('a new click loop')
     console.time()
-    const click = async () => { // just once click
-        const {cX, cY} = getCircleArea(x, y)
-        console.log('click:', x + cX, y + cY)
-        await page.mouse.click(x + cX, y + cY, {delay: randomNumber(0, 10)})
-    }
+
     const loopClick = async (loopClickTimes = 1) => {
         // create loopClick
+        const {cX, cY} = getCircleArea(r)
         if (loopClickTimes < 1) return
         let times = randomNumber(1, loopClickTimes), timing = 0
-        const dispatchTimeClick = async (x = 0, y = 0, frequency = randomNumber(222, 666)) => { // create a frequency click
+        const dispatchTimeClick = async (x = 0, y = 0, frequency = randomNumber(150, 300)) => { // create a frequency click
             return new Promise(resolve => {
                 const t = setTimeout(async () => {
-                    await click()
+                    await click(cX, cY)
                     resolve(t)
                 }, frequency)
             })
@@ -39,8 +50,13 @@ async function mockClick({page = null, x = 0, y = 0, clickTimes = 1}) { // a new
             timing++
             await dispatchTimeClick(x, y)
         }
-        console.log(timing);
     }
+
+    const click = async (cX = 0, cY = 0) => { // just once click
+        console.log('click:', x + cX, y + cY)
+        await page.mouse.click(x + cX, y + cY, {delay: randomNumber(0, 10)})
+    }
+
     await loopClick(clickTimes)
     console.timeEnd() // 一轮点击时长 = 次数：loopClickTimes × (频率：frequency + 点击延时：delay)
     return Promise.resolve('success')
@@ -58,7 +74,7 @@ function _similarImg(data1, data2, deviation = 5) { // 计算相似度 误差值
         }
     }
 
-    return { simi: count / data1.length}
+    return {simi: count / data1.length}
 }
 
 function _parsePostData(request) {
