@@ -16,8 +16,32 @@
 </head>
 <body>
 <main id="app" class="yyds-main">
-    <el-button size="small" type="primary">点我</el-button>
-    <span>{{ counter }}</span>
+    <el-tabs v-model="baseInfo.activePageTab" type="card" @tab-click="onPageTabClick">
+        <el-tab-pane v-for="tab in baseInfo.tabs" :key="tab.name" :label="tab.label" :name="tab.name">
+            <article v-if="tab.name === 'game'" class="game">
+                <el-tabs v-model="baseInfo.activeGameTab" tab-position="left" style="height: 150px;" @tab-click="onGameTabClick">
+                    <el-tab-pane v-for="gameTab in baseInfo.gameTabs" :key="gameTab.name" :label="gameTab.label"
+                                 :name="gameTab.name">
+                        <div v-if="gameTab.name=== 'yuhun'">
+                            御魂
+                        </div>
+                        <div v-if="gameTab.name=== 'yuling'">
+                            御灵
+                        </div>
+                    </el-tab-pane>
+                </el-tabs>
+            </article>
+            <article v-if="tab.name === 'setting'" class="setting">
+                <el-row :gutter="12">
+                    <el-col class="outer" :span="12" v-for="card in baseInfo.settingCards" :key="card.name">
+                        <div class="inner">
+                            {{card.label}}
+                        </div>
+                    </el-col>
+                </el-row>
+            </article>
+        </el-tab-pane>
+    </el-tabs>
 </main>
 </body>
 <script type="text/javascript" src="js/msg.js"></script>

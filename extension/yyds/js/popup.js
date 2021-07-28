@@ -13,23 +13,40 @@
 //         $sendMessageToContentScript({cmd: 'tab4'}, (response) => console.log(response));
 //     })
 // })
+const {reactive} = Vue
 
 const App = {
-    data() {
-        return {
-            counter: 0
+    setup(props) {
+        const retObj = {};
+        const baseInfo = reactive({
+            counter: 0,
+            activePageTab: 'setting',
+            tabs: [
+                {label: 'Game', name: 'game'}, {label: 'Setting', name: 'setting'}
+            ],
+            activeGameTab: 'yuhun',
+            gameTabs: [
+                {label: '御魂', name: 'yuhun'}, {label: '御灵', name: 'yuling'}
+            ],
+            settingCards: [
+                {label: '点击监听', name: 'listenClick'}, {label: '抓取视频', name: 'drawVideo'}
+            ]
+        });
+        Object.assign(retObj, {baseInfo});
+
+        const onPageTabClick = () => {
+            const tabName = baseInfo.activePageTab
+
         }
+        const onGameTabClick = ()=>{
+            const tabName = baseInfo.activeGameTab
+
+        }
+        Object.assign(retObj, {onPageTabClick,onGameTabClick});
+
+        return retObj
     },
-    mounted() {
-        setInterval(() => {
-            this.counter++
-        }, 1000)
-    }
 }
-
-
-
-
 const app = Vue.createApp(App);
 app.use(ElementPlus);
 app.mount("#app");
