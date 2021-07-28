@@ -34,7 +34,7 @@ const {pageMap} = require('./js/map');
                 'https://aso.youmi.net',
                 'https://bot.sannysoft.com'
             ]
-            const url = urls[1]
+            const url = urls[2]
             await page1.goto(url);
             page1.on('request', async request => {
                 const postData = _parsePostData(request)

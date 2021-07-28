@@ -1,29 +1,50 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>popup</title>
+    <!-- import VUE -->
+    <script src="js/vue.js"></script>
+    <!-- import CSS -->
     <link rel="stylesheet" href="css/popup.css">
+    <link rel="stylesheet" href="css/element.css">
+    <!-- import JavaScript -->
+    <script src="js/element.js"></script>
+    <title>popup</title>
 </head>
 <body>
-<main class="yyds-main">
-    <div class="menu-container">
-        <ul class="global-table-menu">
-            <li class="context-item tab1"><div class="inner-item">clickTrack</div></li>
-            <li class="context-item tab2"><div class="inner-item">drawVideo</div></li>
-            <li class="context-item tab3"><div class="inner-item">sendMsg</div></li>
-            <li class="context-item tab4"><div class="inner-item">开始御魂</div></li>
-        </ul>
-    </div>
+<main id="app" class="yyds-main">
+    <el-tabs v-model="baseInfo.activePageTab" type="card" @tab-click="onPageTabClick">
+        <el-tab-pane v-for="tab in baseInfo.tabs" :key="tab.name" :label="tab.label" :name="tab.name">
+            <article v-if="tab.name === 'game'" class="game">
+                <el-tabs v-model="baseInfo.activeGameTab" tab-position="left" style="height: 150px;" @tab-click="onGameTabClick">
+                    <el-tab-pane v-for="gameTab in baseInfo.gameTabs" :key="gameTab.name" :label="gameTab.label"
+                                 :name="gameTab.name">
+                        <div v-if="gameTab.name=== 'yuhun'">
+                            御魂
+                        </div>
+                        <div v-if="gameTab.name=== 'yuling'">
+                            御灵
+                        </div>
+                    </el-tab-pane>
+                </el-tabs>
+            </article>
+            <article v-if="tab.name === 'setting'" class="setting">
+                <el-row :gutter="12">
+                    <el-col class="outer" :span="12" v-for="card in baseInfo.settingCards" :key="card.name">
+                        <div class="inner">
+                            {{card.label}}
+                        </div>
+                    </el-col>
+                </el-row>
+            </article>
+        </el-tab-pane>
+    </el-tabs>
 </main>
-
-<script type="text/javascript" src="js/jquery.js"></script>
+</body>
 <script type="text/javascript" src="js/msg.js"></script>
 <script type="text/javascript" src="js/popup.js"></script>
-</body>
 </html>
-
 <!DOCTYPE html>
