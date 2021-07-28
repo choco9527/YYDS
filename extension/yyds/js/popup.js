@@ -26,23 +26,26 @@ const App = {
             ],
             activeGameTab: 'yuhun',
             gameTabs: [
+
                 {label: '御魂', name: 'yuhun'}, {label: '御灵', name: 'yuling'}
             ],
             settingCards: [
-                {label: '点击监听', name: 'listenClick'}, {label: '抓取视频', name: 'drawVideo'}
+                {label: '点击监听', name: 'listenClick', cmd: 'listenClick'},
+                {label: '抓取视频', name: 'drawVideo', cmd: 'drawVideo'}
             ]
         });
         Object.assign(retObj, {baseInfo});
 
         const onPageTabClick = () => {
             const tabName = baseInfo.activePageTab
-
         }
-        const onGameTabClick = ()=>{
+        const onGameTabClick = () => {
             const tabName = baseInfo.activeGameTab
-
         }
-        Object.assign(retObj, {onPageTabClick,onGameTabClick});
+        const onSettingClick = (cmd) => {
+            $sendMessageToContentScript({cmd}, (response) => console.log(response));
+        }
+        Object.assign(retObj, {onPageTabClick, onGameTabClick, onSettingClick});
 
         return retObj
     },

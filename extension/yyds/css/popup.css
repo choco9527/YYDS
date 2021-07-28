@@ -31,4 +31,10 @@ body, p, h1, h2, h3, h4, h5 {
     height: 100px;
     border: 1px solid #ededed;
     border-radius: 3px;
+    background-color: #8cc5ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    cursor: pointer;
 }

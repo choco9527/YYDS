@@ -9,7 +9,7 @@
         chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
             if (res.code === 'yyds') {
                 const {cmd} = res
-                if (cmd === 'tab1') {
+                if (cmd === 'listenClick') {
                     console.log('开始监听点击')
                     $('body').click(e => {
                         const now = Date.now()
@@ -17,13 +17,10 @@
                         time = now
                         $e.shrinkPoint(e.clientX, e.clientY)
                     })
-                } else if (cmd === 'tab2') {
+                } else if (cmd === 'drawVideo') {
                     console.log('draw video 2 canvas')
                     $canvas.createNewCanvas()
-                } else if (cmd === 'tab3') {
-                    console.log('开始事件通讯');
-                    $e.emit({msg: 'start'})
-                } else if (cmd === 'tab4') {
+                }else if (cmd === 'tab4') {
                     console.log('开始御魂');
                     $e.emit({msg: 'yuhun', type: 'play'})
                 }
