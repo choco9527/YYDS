@@ -34,7 +34,7 @@ const {pageMap} = require('./js/map');
                 'https://aso.youmi.net',
                 'https://bot.sannysoft.com'
             ]
-            const url = urls[3]
+            const url = urls[1]
             await page1.goto(url);
             page1.on('request', async req => {
                 const postData = _parsePostData(req)
@@ -125,7 +125,8 @@ const {pageMap} = require('./js/map');
                     const pItem = pageMap[gameType][i]
                     const compareData = await _getImageData(pItem.path)
                     const compareRes = _similarImg(videoData, compareData)
-                    console.log(compareRes);
+                    if (i === 0) console.log('————')
+                    console.log(compareRes.simi);
                     if (compareRes.simi > pItem.simi) {
                         console.log(pItem.name);
                         let index = Math.floor((randn_bm() * pItem.clickMap.length))

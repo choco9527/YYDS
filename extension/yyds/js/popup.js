@@ -14,6 +14,7 @@ const App = {
             activeGameTab: 'yuhun',
             gameTabs: [
                 {label: '御魂', name: 'yuhun', cmd: 'yuhun', data: {status: 0}},
+                {label: '痴', name: 'chi', cmd: 'chi', data: {status: 0}},
                 {label: '御灵', name: 'yuling', cmd: 'yuling', data: {status: 0}}
             ],
             settingCards: [
