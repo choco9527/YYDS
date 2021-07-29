@@ -62,6 +62,13 @@ const pageMap = {
         clickTimes: 1,
         simi: 0.7,
         r: 20
+    }, {
+        name: '痴失败页',
+        path: 'img/yys/pages/chi/fail.png',
+        clickMap: [{x: 135, y: 385}, {x: 825, y: 400}, {x: 780, y: 175}, {x: 120, y: 170}, {x: 400, y: 160}],
+        clickTimes: 1,
+        simi: 0.7,
+        r: 20
     }]
 }
 
