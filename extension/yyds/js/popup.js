@@ -32,7 +32,7 @@ const App = {
         const onGameClick = ({cmd, label, data}) => {
             $sendMessageToContentScript({cmd, type: 'game'}, res => {
                 if ($gameStatusArr.includes(res.code)) {
-                    data.status = res.code === 'start' ? 1 : res.code ? 0 : -1
+                    // data.status = res.code === 'start' ? 1 : res.code ? 0 : -1
                     console.log(bg.$playingList);
                     $notify(label + '操作', res.msg)
                 }
