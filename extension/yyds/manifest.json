@@ -13,6 +13,10 @@
     "default_popup": "popup.html"
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "background":
+  {
+    "scripts": ["js/background.js"]
+  },
   "content_scripts": [
     {
       "matches": [

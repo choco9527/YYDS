@@ -31,6 +31,7 @@
                         return
                     } else if (type === 'game') {
                         const resData = await $e.emit({cmd, postType: 'game'})
+                        $playingList.push(1)
                         if ($gameStatusArr.includes(resData.code)) port.postMessage(resData)
                         return
                     }

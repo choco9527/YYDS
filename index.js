@@ -91,7 +91,7 @@ const {pageMap} = require('./js/map');
                 contentType: 'application/json; charset=utf-8',
                 body: JSON.stringify({code: 0, data}),
             })
-            console.log('respond：' + data)
+            console.log('respond：' + JSON.stringify(data))
         }
 
         async function playing(gameType = '', req) { // loop playing
