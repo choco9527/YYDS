@@ -7,20 +7,25 @@
     let time = 0;
     (function listenPage() { // 接受popup消息
         chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
-            if (res.code === 'yyds') {
-                const {cmd} = res
-                if (cmd === 'listenClick') {
-                    console.log('开始监听点击')
-                    $('body').click(e => {
-                        const now = Date.now()
-                        console.log('click_body', now - time);
-                        time = now
-                        $e.shrinkPoint(e.clientX, e.clientY)
-                    })
-                } else if (cmd === 'drawVideo') {
-                    console.log('draw video 2 canvas')
-                    $canvas.createNewCanvas()
-                }else if (cmd === 'tab4') {
+            const {cmd, code} = res
+            if (code === 'yyds') {
+                if (type === 'setting') {
+                    switch (cmd) {
+                        case 'listenClick':
+                            console.log('开始监听点击')
+                            $('body').click(e => {
+                                const now = Date.now()
+                                console.log('click_body', now - time);
+                                time = now
+                                $e.shrinkPoint(e.clientX, e.clientY)
+                            })
+                            break
+                        case 'drawVideo':
+                            console.log('draw video 2 canvas')
+                            $canvas.createNewCanvas()
+                            break
+                    }
+                } else if (type === 'game') {
                     console.log('开始御魂');
                     $e.emit({msg: 'yuhun', type: 'play'})
                 }

@@ -24,7 +24,7 @@
                     <el-tab-pane v-for="gameTab in baseInfo.gameTabs" :key="gameTab.name" :label="gameTab.label"
                                  :name="gameTab.name">
                         <div class="game-tab-item">
-                            {{ gameTab.label }}
+                            <el-button @click="onGameClick(gameTab.cmd)">开始{{ gameTab.label }}</el-button>
                         </div>
                     </el-tab-pane>
                 </el-tabs>

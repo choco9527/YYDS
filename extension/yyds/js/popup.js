@@ -26,8 +26,8 @@ const App = {
             ],
             activeGameTab: 'yuhun',
             gameTabs: [
-
-                {label: '御魂', name: 'yuhun'}, {label: '御灵', name: 'yuling'}
+                {label: '御魂', name: 'yuhun', cmd: 'yuhun'},
+                {label: '御灵', name: 'yuling', cmd: 'yuling'}
             ],
             settingCards: [
                 {label: '点击监听', name: 'listenClick', cmd: 'listenClick'},
@@ -42,10 +42,13 @@ const App = {
         const onGameTabClick = () => {
             const tabName = baseInfo.activeGameTab
         }
-        const onSettingClick = (cmd) => {
-            $sendMessageToContentScript({cmd}, (response) => console.log(response));
+        const onGameClick = (cmd) => {
+            $sendMessageToContentScript({cmd, type: 'game'}, (response) => console.log(response));
         }
-        Object.assign(retObj, {onPageTabClick, onGameTabClick, onSettingClick});
+        const onSettingClick = (cmd) => {
+            $sendMessageToContentScript({cmd, type: 'setting'}, (response) => console.log(response));
+        }
+        Object.assign(retObj, {onPageTabClick, onGameTabClick, onGameClick, onSettingClick});
 
         return retObj
     },
