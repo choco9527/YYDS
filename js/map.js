@@ -32,7 +32,15 @@ const pageMap = {
             simi: 0.45,
             r: 50
         }
-    ]
+    ],
+    'yuling': [{
+        name: '御灵选择页',
+        path: 'img/yys/pages/yuhun/yuhun_out.png',
+        clickMap: [{x: 200, y: 320}],
+        clickTimes: 1,
+        simi: 0.6,
+        r: 30
+    },]
 }
 
 module.exports = {pageMap}

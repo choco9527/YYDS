@@ -1,33 +1,18 @@
-// $(document).ready(function () {
-//     $('.tab1').click((e) => {
-//         $sendMessageToContentScript({cmd: 'tab1'}, (response) => console.log(response));
-//     })
-//     $('.tab2').click((e) => {
-//         // $notify('标题', '监听视频')
-//         $sendMessageToContentScript({cmd: 'tab2'}, (response) => console.log(response));
-//     })
-//     $('.tab3').click((e) => {
-//         $sendMessageToContentScript({cmd: 'tab3'}, (response) => console.log(response));
-//     })
-//     $('.tab4').click((e) => {
-//         $sendMessageToContentScript({cmd: 'tab4'}, (response) => console.log(response));
-//     })
-// })
-const {reactive} = Vue
-
+const {ref, reactive} = Vue
+const {ElMessage: $msg} = ElementPlus
 const App = {
     setup(props) {
         const retObj = {};
         const baseInfo = reactive({
             counter: 0,
-            activePageTab: 'setting',
+            activePageTab: 'game',
             tabs: [
                 {label: 'Game', name: 'game'}, {label: 'Setting', name: 'setting'}
             ],
             activeGameTab: 'yuhun',
             gameTabs: [
-                {label: '御魂', name: 'yuhun', cmd: 'yuhun'},
-                {label: '御灵', name: 'yuling', cmd: 'yuling'}
+                {label: '御魂', name: 'yuhun', cmd: 'yuhun', data: {status: 0}},
+                {label: '御灵', name: 'yuling', cmd: 'yuling', data: {status: 0}}
             ],
             settingCards: [
                 {label: '点击监听', name: 'listenClick', cmd: 'listenClick'},
@@ -42,14 +27,20 @@ const App = {
         const onGameTabClick = () => {
             const tabName = baseInfo.activeGameTab
         }
-        const onGameClick = (cmd) => {
-            $sendMessageToContentScript({cmd, type: 'game'}, (response) => console.log(response));
+        const onGameClick = ({cmd, label, data}) => {
+            $sendMessageToContentScript({cmd, type: 'game'}, res => {
+                if ($gameStatusArr.includes(res.code)) {
+                    data.status = res.code === 'start' ? 1 : res.code ? 0 : -1
+                    $notify(label + '操作', res.msg)
+                }
+            });
         }
-        const onSettingClick = (cmd) => {
-            $sendMessageToContentScript({cmd, type: 'setting'}, (response) => console.log(response));
+        const onSettingClick = (cmd, label) => {
+            $sendMessageToContentScript({cmd, type: 'setting'}, res => {
+                if (res === 'ok') $notify('setting操作', label)
+            });
         }
         Object.assign(retObj, {onPageTabClick, onGameTabClick, onGameClick, onSettingClick});
-
         return retObj
     },
 }

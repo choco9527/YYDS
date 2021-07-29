@@ -7,10 +7,13 @@ window.$notify = (title = '', message = '') => {
         message
     })
 }
-window.$sendMessageToContentScript = (message, callback) => {
+window.$sendMessageToContentScript = (message, cb) => {
     Object.assign(message, {code: 'yyds'})
-    chrome.tabs.query({active: true, currentWindow: true}, (tabs) =>
-        chrome.tabs.sendMessage(tabs[0].id, message, (response = null) => (callback && response) && callback(response))
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+            const port = chrome.tabs.connect(tabs[0].id, {name: 'yyds-popup-connect'});
+            port.postMessage(message);
+            port.onMessage.addListener(data => cb(data))
+        }
     )
 }
 

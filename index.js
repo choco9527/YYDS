@@ -34,12 +34,12 @@ const {pageMap} = require('./js/map');
                 'https://aso.youmi.net',
                 'https://bot.sannysoft.com'
             ]
-            const url = urls[2]
+            const url = urls[3]
             await page1.goto(url);
-            page1.on('request', async request => {
-                const postData = _parsePostData(request)
-                if (postData && postData.code + '' === '0' && postData.type === 'pageHandle') {
-                    if (postData.msg === 'inputPhone' && process.env.PHONE) { // 输入手机号
+            page1.on('request', async req => {
+                const postData = _parsePostData(req)
+                if (postData && postData.code + '' === '0' && postData.postType === 'pageHandle') {
+                    if (postData.cmd === 'inputPhone' && process.env.PHONE) { // 输入手机号
                         await page1.mouse.click(495, 295)
                         await page1.keyboard.type(process.env.PHONE, {delay: 100})
                         await page1.mouse.click(480, 365)
@@ -70,36 +70,59 @@ const {pageMap} = require('./js/map');
                 return
             }
             console.log('getPage-' + page.url());
+            await page.setRequestInterception(true) // 请求拦截
 
-            page.on('request', async request => {
-                const postData = _parsePostData(request)
-                if (postData && postData.code + '' === '0' && postData.type === 'play') {
-                    await playing(postData.msg)
+            page.on('request', async req => {
+                const postData = _parsePostData(req)
+                if (postData && postData.code + '' === '0' && postData.postType === 'game') {
+                    await playing(postData.cmd, req)
+                } else {
+                    await req.continue()
                 }
             })
         }
 
         const playingList = []
 
-        async function playing(type = '') { // loop playing
-            if (!type) return
-            const item = {type, play: true}
+        async function response2page(req, data = null) {
+            await req.respond({
+                status: 200,
+                headers: {'Access-Control-Allow-Origin': '*',},
+                contentType: 'application/json; charset=utf-8',
+                body: JSON.stringify({code: 0, data}),
+            })
+            console.log('respond：' + data)
+        }
+
+        async function playing(gameType = '', req) { // loop playing
+            if (!gameType) return
+            const item = {gameType, intervalId: 0}
 
             for (let i = 0; i < playingList.length; i++) {
                 const item = playingList[i]
-                if (item.type === type) {
-                    console.log(type + '-停止')
+                if (item.gameType === gameType) {
+                    await response2page(req, {code: 'stop', msg: '停止'})
                     clearInterval(item.intervalId) // 关闭监听
-                    playingList.splice(i,1)
+                    playingList.splice(i, 1)
                     return
                 }
             }
-            if (!pageMap[type]) throw new Error('no this type')
+
+            if (playingList.length > 0) {
+                await response2page(req, {code: 'elseGame', msg: '请先停止其他正在执行的操作'})
+                return
+            }
+
+            if (!pageMap[gameType]) {
+                await response2page(req, {code: 'noGame', msg: '暂不支持该类型操作'})
+                return
+            }
+            await response2page(req, {code: 'start', msg: '开始'})
 
             item.intervalId = setInterval(async () => {
                 const videoData = await _getVideoData()
-                for (let i = 0; i < pageMap[type].length; i++) {
-                    const pItem = pageMap[type][i]
+                for (let i = 0; i < pageMap[gameType].length; i++) {
+                    const pItem = pageMap[gameType][i]
                     const compareData = await _getImageData(pItem.path)
                     const compareRes = _similarImg(videoData, compareData)
                     console.log(compareRes);

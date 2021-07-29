@@ -24,7 +24,7 @@
                     <el-tab-pane v-for="gameTab in baseInfo.gameTabs" :key="gameTab.name" :label="gameTab.label"
                                  :name="gameTab.name">
                         <div class="game-tab-item">
-                            <el-button @click="onGameClick(gameTab.cmd)">开始{{ gameTab.label }}</el-button>
+                            <el-button v-if="gameTab.data.status !== -1" @click="onGameClick(gameTab,gameTab.data)">{{gameTab.data.status === 1 ? '停止' :'开始'}}{{ gameTab.label }}</el-button>
                         </div>
                     </el-tab-pane>
                 </el-tabs>
@@ -32,7 +32,7 @@
             <article v-if="tab.name === 'setting'" class="setting">
                 <el-row :gutter="12">
                     <el-col class="outer" :span="12" v-for="card in baseInfo.settingCards" :key="card.name">
-                        <div class="inner" @click="onSettingClick(card.cmd)">
+                        <div class="inner" @click="onSettingClick(card.cmd,card.label)">
                             {{card.label}}
                         </div>
                     </el-col>
@@ -42,6 +42,7 @@
     </el-tabs>
 </main>
 </body>
+<script type="text/javascript" src="js/info.js"></script>
 <script type="text/javascript" src="js/msg.js"></script>
 <script type="text/javascript" src="js/popup.js"></script>
 </html>

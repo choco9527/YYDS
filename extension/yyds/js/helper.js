@@ -5,21 +5,25 @@ class MyEvent {
         this.initPoint()
     }
 
-    emit(params) {
-        this.$.ajax({
-            url: 'http://localhost:6699', // any port
-            dataType: 'json',
-            data: Object.assign({code: 0, type: ''}, params),
-            headers: {'custom-info': 'yyds'},
-            timeout: 1,
-            type: 'post',
-            success(res) {
-                console.log(res);
-            },
-            error(err) {
-                console.log(err);
-            }
-        });
+    async emit(params) {
+        return new Promise((resolve, reject) => {
+            this.$.ajax({
+                url: 'yyds/api',
+                dataType: 'json',
+                data: Object.assign({code: 0, postType: ''}, params),
+                headers: {'custom-info': 'yyds'},
+                timeout: 1500,
+                type: 'post',
+                success(res) {
+                    console.log('请求成功', res);
+                    if (res.code === 0) resolve(res.data)
+                },
+                error(err) {
+                    console.log('请求失败', err);
+                    reject(err)
+                }
+            });
+        })
     }
 
     initPoint() { // 初始化小圆点
