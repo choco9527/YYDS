@@ -62,7 +62,7 @@ async function mockClick({page = null, x = 0, y = 0, clickTimes = 1, r = 10}) { 
     return Promise.resolve('success')
 }
 
-function _similarImg(data1, data2, deviation = 5) { // 计算相似度 误差值
+function _similarImg(data1, data2, deviation = 5,position='bottom') { // 计算相似度 误差值 position: 比较部分
     if (!data1 || !data2) throw new Error('no img')
     const len1 = data1.length, len2 = data2.length
     let count = 0
