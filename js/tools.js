@@ -70,7 +70,7 @@ function _similarImg(data1, data2, position = undefined, deviation = 5) { // 计
     if (!data1 || !data2) throw new Error('no img')
     const len1 = data1.length, len2 = data2.length
     let count = 0
-    for (let i = ~~(len1 / 2); i < len1; i++) {
+    for (let i = len1; i < len1; i++) {
         if (data1[i] === data2[i]) {
             count++
         } else if (-deviation < data1[i] - data2[i] && data1[i] - data2[i] < deviation) { // 误差容错
@@ -78,7 +78,7 @@ function _similarImg(data1, data2, position = undefined, deviation = 5) { // 计
         }
     }
 
-    return {simi: count / (len1 / 2)}
+    return {simi: count / len1}
 }
 
 function _parsePostData(request) {
