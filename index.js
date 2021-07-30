@@ -124,7 +124,7 @@ const {pageMap} = require('./js/map');
                 for (let i = 0; i < pageMap[gameType].length; i++) {
                     const pItem = pageMap[gameType][i]
                     const compareData = await _getImageData(pItem.path)
-                    const compareRes = _similarImg(videoData, compareData)
+                    const compareRes = _similarImg(videoData, compareData,pItem.position)
                     if (i === 0) console.log('————')
                     console.log(compareRes.simi);
                     if (compareRes.simi > pItem.simi) {

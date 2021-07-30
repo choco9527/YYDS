@@ -3,6 +3,7 @@ const pageMap = {
         {
             name: '御魂选择页',
             path: 'img/yys/pages/yuhun/yuhun_out.png',
+            position: {x1: 0, x2: 200, y1: 0, y2: 200},
             clickMap: [{x: 200, y: 320}],
             clickTimes: 1,
             simi: 0.6,

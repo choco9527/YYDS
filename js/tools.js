@@ -62,7 +62,11 @@ async function mockClick({page = null, x = 0, y = 0, clickTimes = 1, r = 10}) { 
     return Promise.resolve('success')
 }
 
-function _similarImg(data1, data2, deviation = 5, position = 'bottom') { // 计算相似度 误差值 position: 比较部分
+function _similarImg(data1, data2, position = undefined, deviation = 5) { // 计算相似度 误差值 position: 比较部分
+    if (position) {
+        data1 = _getAreaData(data1, position)
+        data2 = _getAreaData(data2, position)
+    }
     if (!data1 || !data2) throw new Error('no img')
     const len1 = data1.length, len2 = data2.length
     let count = 0
@@ -109,7 +113,8 @@ function _get2dData(arr1d = [], width = 0, height = 0) { // 2维化
     return arr2d
 }
 
-function _getAreaData(data, x1 = 0, x2 = 0, y1 = 0, y2 = 0) {
+function _getAreaData(data, {x1 = 0, x2 = 0, y1 = 0, y2 = 0}) {
+    if (!x1 && !x2 && !y1 && !y2) return
     /* x1=1 x2=2 y1=1 y2=2
     * [0,0,0,0,0,0,0,0,0]  ->  [0, 0,0 ]   ->  [0,0,0,0]
     *                          [0,|0,0|]
