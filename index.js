@@ -5,7 +5,7 @@ puppeteer.use(StealthPlugin())
 const {createCanvas, loadImage} = require('canvas')
 const dotenv = require("dotenv")
 dotenv.config()
-const {getPath, mockClick, _parsePostData, _similarImg, randn_bm} = require('./js/tools');
+const {getPath, mockClick, _parsePostData, _grayData, _similarImg, randn_bm} = require('./js/tools');
 const {pageMap} = require('./js/map');
 (async () => {
     try {
@@ -34,7 +34,7 @@ const {pageMap} = require('./js/map');
                 'https://aso.youmi.net',
                 'https://bot.sannysoft.com'
             ]
-            const url = urls[1]
+            const url = urls[3]
             await page1.goto(url);
             page1.on('request', async req => {
                 const postData = _parsePostData(req)
@@ -118,7 +118,7 @@ const {pageMap} = require('./js/map');
                 return
             }
             await response2page(req, {code: 'start', msg: '开始'})
-
+            await page.exposeFunction('_grayData', _grayData)
             item.intervalId = setInterval(async () => {
                 const videoData = await _getVideoData()
                 for (let i = 0; i < pageMap[gameType].length; i++) {
@@ -145,7 +145,8 @@ const {pageMap} = require('./js/map');
                 const ctx = canvasEle.getContext('2d')
                 ctx.imageSmoothingEnabled = false // 锐化
                 let frame = ctx.getImageData(0, 0, canvasEle.width, canvasEle.height);
-                const arr = Array.from(frame.data)
+                const data = Array.from(frame.data)
+                const arr = await window._grayData(data)
                 return Promise.resolve(arr)
             });
         }
@@ -160,7 +161,7 @@ const {pageMap} = require('./js/map');
             ctx.imageSmoothingEnabled = false // 锐化
             ctx.drawImage(img, 0, 0, width, height)
             let frame = ctx.getImageData(0, 0, width, height);
-            return frame.data
+            return _grayData(frame.data)
         }
 
         await listenIt() // 监听页面

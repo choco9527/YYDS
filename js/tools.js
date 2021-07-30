@@ -62,7 +62,7 @@ async function mockClick({page = null, x = 0, y = 0, clickTimes = 1, r = 10}) { 
     return Promise.resolve('success')
 }
 
-function _similarImg(data1, data2, deviation = 5,position='bottom') { // 计算相似度 误差值 position: 比较部分
+function _similarImg(data1, data2, deviation = 5, position = 'bottom') { // 计算相似度 误差值 position: 比较部分
     if (!data1 || !data2) throw new Error('no img')
     const len1 = data1.length, len2 = data2.length
     let count = 0
@@ -90,23 +90,40 @@ function _parsePostData(request) {
     return null
 }
 
-function _getCtx2dData(frame = null, width = 0, height = 0) { // 转为2维数组 废弃
-    if (!frame) throw new Error('no frame')
-    const data = frame.data
+function _grayData(data) { // 灰化
     const l = data.length;
     const arr = []
     for (let i = 0; i < l; i += 4) { // Gray scale
         const avg = ((data[i] + data[i + 1] + data[i + 2]) / 3) << 0;
         arr.push(avg)
-        // arr.push(avg >= 255 * 0.75 ? 3 : avg >= 255 * 0.5 ? 2 : avg >= 255 * 0.25 ? 1 : 0) // 提取指纹
-        // arr.push(avg >= 255 * 0.5 ? 1 : 0) // 提取指纹
     }
+    return arr
+}
+
+function _get2dData(arr1d = [], width = 0, height = 0) { // 2维化
     const arr2d = [] // to 2d arr
     for (let i = 0; i < height; i++) {
-        const a = arr.slice(i * width, (i + 1) * width)
+        const a = arr1d.slice(i * width, (i + 1) * width)
         arr2d.push(a)
     }
     return arr2d
+}
+
+function _getAreaData(data, x1 = 0, x2 = 0, y1 = 0, y2 = 0) {
+    /* x1=1 x2=2 y1=1 y2=2
+    * [0,0,0,0,0,0,0,0,0]  ->  [0, 0,0 ]   ->  [0,0,0,0]
+    *                          [0,|0,0|]
+    *                          [0,|0,0|]
+    * */
+    const data2d = _get2dData(data)
+    const height = data2d.length
+    const arr = []
+    for (let i = 0; i < height; i++) {
+        if (y1 <= i && i <= y2) {
+            arr.concat(data2d[i].slice(x1, x2 + 1))
+        }
+    }
+    return arr // 返回的是一维数组
 }
 
 function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所在位置（废弃）
@@ -141,5 +158,5 @@ function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所�
     }
 }
 
-module.exports = {getPath, mockClick, _parsePostData, _similarImg, randn_bm};
+module.exports = {getPath, mockClick, _parsePostData, _grayData, _similarImg, randn_bm};
 
