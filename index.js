@@ -134,7 +134,7 @@ const {pageMap} = require('./js/map');
                         await mockClick({page, x, y, clickTimes: pItem.clickTimes, r: pItem.r})
                     }
                 }
-            }, 2500)
+            }, 2800)
 
             playingList.push(item)
         }
