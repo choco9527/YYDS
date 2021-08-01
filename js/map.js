@@ -3,7 +3,7 @@ const pageMap = {
         {
             name: '御魂选择页',
             path: 'img/yys/pages/yuhun/yuhun_out.png',
-            position: {x1: 0, y1: 0, x2: 200, y2: 300},
+            // position: {x1: 800, y1: 0, x2: 960, y2: 540},
             clickMap: [{x: 200, y: 320}],
             clickTimes: 1,
             simi: 0.6,
@@ -28,6 +28,7 @@ const pageMap = {
         {
             name: '御魂结束页',
             path: 'img/yys/pages/yuhun/finish.png',
+            // position: {x1: 0, y1: 0, x2: 200, y2: 300},
             clickMap: [{x: 700, y: 400}, {x: 430, y: 470}, {x: 500, y: 380}, {x: 650, y: 430}, {x: 140, y: 380}],
             clickTimes: 3,
             simi: 0.45,
@@ -42,7 +43,8 @@ const pageMap = {
         simi: 0.6,
         r: 30
     }],
-    'chi': [{
+    'chi': [
+        {
         name: '痴选择页',
         path: 'img/yys/pages/yuhun/yuhun_out.png',
         clickMap: [{x: 200, y: 320}],

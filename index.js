@@ -34,7 +34,7 @@ const {pageMap} = require('./js/map');
                 'https://aso.youmi.net',
                 'https://bot.sannysoft.com'
             ]
-            const url = urls[3]
+            const url = urls[1]
             await page1.goto(url);
             page1.on('request', async req => {
                 const postData = _parsePostData(req)
@@ -70,6 +70,8 @@ const {pageMap} = require('./js/map');
                 return
             }
             console.log('getPage-' + page.url());
+            await page.exposeFunction('_grayData', _grayData)
+
             await page.setRequestInterception(true) // 请求拦截
 
             page.on('request', async req => {
@@ -118,7 +120,6 @@ const {pageMap} = require('./js/map');
                 return
             }
             await response2page(req, {code: 'start', msg: '开始'})
-            await page.exposeFunction('_grayData', _grayData)
             item.intervalId = setInterval(async () => {
                 const videoData = await _getVideoData()
                 for (let i = 0; i < pageMap[gameType].length; i++) {

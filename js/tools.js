@@ -69,6 +69,7 @@ function _similarImg(data1, data2, position = undefined, deviation = 5) { // 计
     }
     if (!data1 || !data2) throw new Error('no img')
     const len1 = data1.length, len2 = data2.length
+    console.log(len1, len2);
     let count = 0
     for (let i = len1; i < len1; i++) {
         if (data1[i] === data2[i]) {
