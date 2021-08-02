@@ -1,3 +1,5 @@
+const K = 4
+
 function getPath(path) {
     return __dirname + '/../' + path
 }
@@ -62,20 +64,17 @@ async function mockClick({page = null, x = 0, y = 0, clickTimes = 1, r = 10}) { 
     return Promise.resolve('success')
 }
 
-function _similarImg(data1, data2, position = undefined, deviation = 5) { // 计算相似度 误差值 position: 比较部分
-    if (position) {
-        data1 = _getAreaData(data1, position)
-        data2 = _getAreaData(data2, position)
-    }
+function _similarImg(d1, d2, position = undefined, deviation = 5) { // 计算相似度 误差值 position: 比较部分
+    const data1 = position ? _getAreaData(d1, position) : d1
+    const data2 = position ? _getAreaData(d2, position) : d2
     if (!data1 || !data2) throw new Error('no img')
     const len1 = data1.length, len2 = data2.length
-    console.log(len1, len2);
     let count = 0
-    for (let i = len1; i < len1; i++) {
+    for (let i = 0; i < len1; i++) {
         if (data1[i] === data2[i]) {
             count++
         } else if (-deviation < data1[i] - data2[i] && data1[i] - data2[i] < deviation) { // 误差容错
-            count++
+            // count++
         }
     }
 
@@ -115,20 +114,20 @@ function _get2dData(arr1d = [], width = 0, height = 0) { // 2维化
 }
 
 function _getAreaData(data, {x1 = 0, x2 = 0, y1 = 0, y2 = 0}) {
-    console.log(x1, x2, y1, y2);
     if (!x1 && !x2 && !y1 && !y2) return []
     /* x1=1 x2=2 y1=1 y2=2
     * [0,0,0,0,0,0,0,0,0]  ->  [0, 0,0 ]   ->  [0,0,0,0]
     *                          [0,|0,0|]
     *                          [0,|0,0|]
     * */
-    const data2d = _get2dData(data)
-    console.log(data2d);
-    const height = data2d.length
-    const arr = []
+    const width = 960 / K
+    const height = 540 / K
+    const data2d = _get2dData(data, width, height)
+
+    let arr = []
     for (let i = 0; i < height; i++) {
         if (y1 <= i && i <= y2) {
-            arr.concat(data2d[i].slice(x1, x2 + 1))
+            arr = arr.concat(data2d[i].slice(x1, x2 + 1))
         }
     }
     return arr // 返回的是一维数组
@@ -166,5 +165,5 @@ function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所�
     }
 }
 
-module.exports = {getPath, mockClick, _parsePostData, _grayData, _similarImg, randn_bm};
+module.exports = {getPath, mockClick, _parsePostData, _grayData, _similarImg, randn_bm, K};
 

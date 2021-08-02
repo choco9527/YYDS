@@ -5,7 +5,7 @@ puppeteer.use(StealthPlugin())
 const {createCanvas, loadImage} = require('canvas')
 const dotenv = require("dotenv")
 dotenv.config()
-const {getPath, mockClick, _parsePostData, _grayData, _similarImg, randn_bm} = require('./js/tools');
+const {getPath, mockClick, _parsePostData, _grayData, _similarImg, randn_bm, K} = require('./js/tools');
 const {pageMap} = require('./js/map');
 (async () => {
     try {
@@ -121,12 +121,26 @@ const {pageMap} = require('./js/map');
             }
             await response2page(req, {code: 'start', msg: '开始'})
             item.intervalId = setInterval(async () => {
+                console.time()
                 const videoData = await _getVideoData()
                 for (let i = 0; i < pageMap[gameType].length; i++) {
-                    const pItem = pageMap[gameType][i]
-                    const compareData = await _getImageData(pItem.path)
-                    const compareRes = _similarImg(videoData, compareData, pItem.position)
                     if (i === 0) console.log('————')
+                    const pItem = pageMap[gameType][i]
+                    let compareData = []
+                    if (!!pItem.img.data) {
+                        compareData = pItem.img.data
+                    } else {
+                        compareData = await _getImageData(pItem.path)
+                        pItem.img.data = compareData
+                    }
+                    let position
+                    if (pItem.position) {
+                        position = {}
+                        for (const key in pItem.position) {
+                            position[key] = ~~(pItem.position[key] / K)
+                        }
+                    }
+                    const compareRes = _similarImg(videoData, compareData, position)
                     console.log(compareRes.simi);
                     if (compareRes.simi > pItem.simi) {
                         console.log(pItem.name);
@@ -135,7 +149,8 @@ const {pageMap} = require('./js/map');
                         await mockClick({page, x, y, clickTimes: pItem.clickTimes, r: pItem.r})
                     }
                 }
-            }, 2800)
+                console.timeEnd()
+            }, 1200)
 
             playingList.push(item)
         }
@@ -155,8 +170,7 @@ const {pageMap} = require('./js/map');
         async function _getImageData(path = '', scale = false) {
             if (!path) throw new Error('no path')
             const img = await loadImage(getPath(path))
-            const k = 4
-            const width = img.width / k, height = img.height / k
+            const width = img.width / K, height = img.height / K
             const canvas = createCanvas(width, height)
             const ctx = canvas.getContext('2d')
             ctx.imageSmoothingEnabled = false // 锐化

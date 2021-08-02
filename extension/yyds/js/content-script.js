@@ -27,6 +27,9 @@
                                 console.log('draw video 2 canvas')
                                 $canvas.createNewCanvas()
                                 break
+                            case 'videoTest':
+                                await $e.emit({cmd, postType: 'game'})
+                                break
                         }
                         return
                     } else if (type === 'game') {

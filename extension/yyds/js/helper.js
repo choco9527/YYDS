@@ -67,14 +67,14 @@ class HandleCanvas {
     }
 
     initCanvas() {
-        const k = 4
+        const K = 4
         let canvasEle = document.createElement('canvas')
         canvasEle.id = 'yyds-canvas'
         canvasEle.style.display = 'none'
         canvasEle.style.zIndex = '-100'
         canvasEle.style.opacity = '0'
-        canvasEle.width = this.viewWidth / k
-        canvasEle.height = this.viewHeight / k
+        canvasEle.width = this.viewWidth / K
+        canvasEle.height = this.viewHeight / K
         document.body.appendChild(canvasEle)
         this.canvasEle = canvasEle
     }

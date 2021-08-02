@@ -30,7 +30,7 @@
             </article>
             <article v-if="tab.name === 'setting'" class="setting">
                 <van-row :gutter="12">
-                    <van-col class="outer" :span="12" v-for="card in baseInfo.settingCards" :key="card.name">
+                    <van-col class="outer" :span="8" v-for="card in baseInfo.settingCards" :key="card.name">
                         <div class="inner" @click="onSettingClick(card.cmd,card.label)">
                             {{card.label}}
                         </div>
