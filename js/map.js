@@ -1,9 +1,9 @@
-const pageMap = {
+const pageMap = { // 240 * 135 = 32400
     'yuhun': [
         {
             name: '御魂选择页',
             path: 'img/yys/pages/yuhun/yuhun_out.png',
-            // position: {x1: 800, y1: 0, x2: 960, y2: 540},
+            position: {x1: 0, y1: 62, x2: 240, y2: 135},
             clickMap: [{x: 200, y: 320}],
             clickTimes: 1,
             simi: 0.6,

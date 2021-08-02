@@ -115,13 +115,15 @@ function _get2dData(arr1d = [], width = 0, height = 0) { // 2维化
 }
 
 function _getAreaData(data, {x1 = 0, x2 = 0, y1 = 0, y2 = 0}) {
-    if (!x1 && !x2 && !y1 && !y2) return
+    console.log(x1, x2, y1, y2);
+    if (!x1 && !x2 && !y1 && !y2) return []
     /* x1=1 x2=2 y1=1 y2=2
     * [0,0,0,0,0,0,0,0,0]  ->  [0, 0,0 ]   ->  [0,0,0,0]
     *                          [0,|0,0|]
     *                          [0,|0,0|]
     * */
     const data2d = _get2dData(data)
+    console.log(data2d);
     const height = data2d.length
     const arr = []
     for (let i = 0; i < height; i++) {

@@ -1,6 +1,5 @@
 const {ref, reactive} = Vue
-const {ElMessage: $msg} = ElementPlus
-const bg = chrome.extension.getBackgroundPage();
+// const bg = chrome.extension.getBackgroundPage();
 
 const App = {
     setup(props) {
@@ -34,7 +33,7 @@ const App = {
             $sendMessageToContentScript({cmd, type: 'game'}, res => {
                 if ($gameStatusArr.includes(res.code)) {
                     // data.status = res.code === 'start' ? 1 : res.code ? 0 : -1
-                    console.log(bg.$playingList);
+                    // console.log(bg.$playingList);
                     $notify(label + '操作', res.msg)
                 }
             });
@@ -49,6 +48,6 @@ const App = {
     },
 }
 const app = Vue.createApp(App);
-app.use(ElementPlus);
+app.use(vant);
 app.mount("#app");
 

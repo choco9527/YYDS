@@ -9,37 +9,36 @@
     <script src="js/vue.js"></script>
     <!-- import CSS -->
     <link rel="stylesheet" href="css/popup.css">
-    <link rel="stylesheet" href="css/element.css">
+    <link rel="stylesheet" href="css/vant.css"/>
     <!-- import JavaScript -->
-    <script src="js/element.js"></script>
+    <script src="js/vant.js"></script>
     <title>popup</title>
 </head>
 <body>
 <main id="app" class="yyds-main">
-    <el-tabs v-model="baseInfo.activePageTab" type="card" @tab-click="onPageTabClick">
-        <el-tab-pane v-for="tab in baseInfo.tabs" :key="tab.name" :label="tab.label" :name="tab.name">
+    <van-tabs v-model:active="baseInfo.activePageTab"  @change="onPageTabClick">
+        <van-tab v-for="tab in baseInfo.tabs" :key="tab.name" :title="tab.label" :name="tab.name">
             <article v-if="tab.name === 'game'" class="game">
-                <el-tabs v-model="baseInfo.activeGameTab" tab-position="left" style="height: 150px;"
-                         @tab-click="onGameTabClick">
-                    <el-tab-pane v-for="gameTab in baseInfo.gameTabs" :key="gameTab.name" :label="gameTab.label"
+                <van-tabs v-model:active="baseInfo.activeGameTab" @change="onGameTabClick">
+                    <van-tab v-for="gameTab in baseInfo.gameTabs" :key="gameTab.name" :title="gameTab.label"
                                  :name="gameTab.name">
                         <div class="game-tab-item">
-                            <el-button v-if="gameTab.data.status !== -1" @click="onGameClick(gameTab,gameTab.data)">{{gameTab.data.status === 1 ? '停止' :'开始'}}{{ gameTab.label }}</el-button>
+                            <van-button v-if="gameTab.data.status !== -1" @click="onGameClick(gameTab,gameTab.data)">{{gameTab.data.status === 1 ? '停止' :'开始'}}{{ gameTab.label }}</van-button>
                         </div>
-                    </el-tab-pane>
-                </el-tabs>
+                    </van-tab>
+                </van-tabs>
             </article>
             <article v-if="tab.name === 'setting'" class="setting">
-                <el-row :gutter="12">
-                    <el-col class="outer" :span="12" v-for="card in baseInfo.settingCards" :key="card.name">
+                <van-row :gutter="12">
+                    <van-col class="outer" :span="12" v-for="card in baseInfo.settingCards" :key="card.name">
                         <div class="inner" @click="onSettingClick(card.cmd,card.label)">
                             {{card.label}}
                         </div>
-                    </el-col>
-                </el-row>
+                    </van-col>
+                </van-row>
             </article>
-        </el-tab-pane>
-    </el-tabs>
+        </van-tab>
+    </van-tabs>
 </main>
 </body>
 <script type="text/javascript" src="js/info.js"></script>
