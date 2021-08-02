@@ -25,7 +25,6 @@ const pageMap = {
         {
             name: '御魂选择页',
             path: 'img/yys/pages/yuhun/yuhun_out.png',
-            // position: {x1: 0, y1: 62, x2: 240, y2: 135},
             clickMap: [{x: 200, y: 320}],
             clickTimes: 1,
             simi: 0.6,
@@ -37,7 +36,7 @@ const pageMap = {
             path: 'img/yys/pages/yuhun/yuhun11.png',
             clickMap: [{x: 870, y: 485}],
             clickTimes: 2,
-            simi: 0.6,
+            simi: 0.5,
             r: 20,
             img: {data: null}
         },
@@ -53,7 +52,7 @@ const pageMap = {
         {
             name: '御魂结束页',
             path: 'img/yys/pages/yuhun/finish.png',
-            // position: {x1: 0, y1: 0, x2: 200, y2: 300},
+            position: {x1: 0, y1: 300, x2: 960, y2: 540},
             clickMap: [{x: 700, y: 400}, {x: 430, y: 470}, {x: 500, y: 380}, {x: 650, y: 430}, {x: 140, y: 380}],
             clickTimes: 3,
             simi: 0.45,
@@ -108,8 +107,19 @@ const pageMap = {
 }
 
 const globalMap = { // 公用图
-
+    'fighting':{
+        name: '战斗中',
+        path: 'img/yys/pages/global/fighting.png',
+        position: {x1: 0, y1: 530, x2: 150, y2: 670}, // 比对图片区域（无则比对整张图）
+        clickMap: [{x: 100, y: 100},{x: 100, y: 200},{x: 100, y: 300},],
+        clickTimes: 1,
+        simi: 0.6,
+        r: 30,
+        img: {data: null}
+    }
 }
+
+pageMap['yuhun'].push(globalMap['fighting'])
 
 function deepFreeze(obj) {
     const propNames = Object.getOwnPropertyNames(obj);

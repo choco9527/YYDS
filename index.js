@@ -34,7 +34,7 @@ const {pageMap} = require('./js/map');
                 'https://aso.youmi.net',
                 'https://bot.sannysoft.com'
             ]
-            const url = urls[3]
+            const url = urls[1]
             await page1.goto(url);
             page1.on('request', async req => {
                 const postData = _parsePostData(req)
@@ -150,7 +150,7 @@ const {pageMap} = require('./js/map');
                     }
                 }
                 console.timeEnd()
-            }, 1200)
+            }, 3000)
 
             playingList.push(item)
         }
