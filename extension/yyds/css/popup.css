@@ -24,7 +24,7 @@ body, p, h1, h2, h3, h4, h5 {
 .yyds-main {
     width: 360px;
     height: 200px;
-    border: 1px solid #dedede;
+    border: 1px solid #f1efef;
     overflow: auto;
     box-sizing: border-box;
     padding: 4px;

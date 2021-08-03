@@ -5,7 +5,8 @@ const pageMap = {
             path: 'img/test/testyoumi.png', // 比对的图片路径
             position: {x1: 300, y1: 195, x2: 670, y2: 250}, // 比对图片区域（无则比对整张图）
             // clickMap: [{x: 2, y: 2}], // 安全点击位置
-            dragMap: [{x1: 10, y1: 100, x2: 250, y2: 200,duration:200},{x1: 20, y1: 200, x2: 350, y2: 100,duration:1000}], // 拖拽行为
+            dragMap: [{x1: 10, y1: 100, x2: 250, y2: 200, duration: 200},
+                {x1: 20, y1: 200, x2: 350, y2: 100, duration: 1000}], // 拖拽行为
             clickTimes: 1, // 点击次数
             simi: 0.8, // 相似度阈值
             r: 30, // 点击半径
