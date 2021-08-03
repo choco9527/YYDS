@@ -20,10 +20,6 @@ function randn_bm() { // 取 0-1 服从正态分布
     return num;
 }
 
-function randomNumber_mb(min = 0, max = 0) { // 服从正态分布的随机取值
-    return Math.floor(randn_bm() * (max - min + 1) + min)
-}
-
 function getCircleArea(r = 10) { // get area by xy for circle
     const cX = randomNumber_mb(-r, r) // x position
     const maxY = Math.sqrt(r * r - cX * cX) //  -maxY —— +maxY
@@ -31,12 +27,37 @@ function getCircleArea(r = 10) { // get area by xy for circle
     return {cX, cY}
 }
 
-async function mockDrag({page = null, x1 = 0, y1 = 0, x2 = 0, y2 = 0}) { // a new drag
+function easeOutCirc(x = 0) { // 变量 x 表示 0（动画开始）到 1（动画结束）范围内的值。
+    return Math.sqrt(1 - Math.pow(x - 1, 2));
+}
+
+function randomNumber_mb(min = 0, max = 0) { // 服从正态分布的随机取值
+    return Math.floor(randn_bm() * (max - min + 1) + min)
+}
+
+
+async function mockDrag({page = null, x1 = 0, y1 = 0, x2 = 0, y2 = 0, duration = 1000, r = 50}) { // a new drag
     if (!page) throw new Error('no page')
+    const {cX, cY} = getCircleArea(r)
+    const {cX: cX2, cY: cY2} = getCircleArea(r)
+    x1 = x1 + cX
+    y1 = y1 + cY // 起点漂移
+    x2 = x2 + cX2
+    y2 = y2 + cY2 // 终点漂移
+    const dx = x2 - x1
+    const dy = y2 - y1
+    let rate = 0
     await page.mouse.move(x1, y1)
     await page.mouse.down()
-    await page.mouse.move(x2, y2, {steps: 50})
-    await page.mouse.up()
+    const interId = setInterval(async () => {
+        const r = easeOutCirc(rate)
+        await page.mouse.move(x1 + dx * r, y1 + dy * r)
+        rate += 30 / 1000
+    }, 30)
+    setTimeout(async () => {
+        clearInterval(interId)
+        await page.mouse.up()
+    }, duration)
 }
 
 async function mockClick({page = null, x = 0, y = 0, clickTimes = 1, r = 10}) { // a new click loop
@@ -171,5 +192,5 @@ function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所�
     }
 }
 
-module.exports = {getPath, mockClick,mockDrag, _parsePostData, _grayData, _similarImg, randn_bm, K};
+module.exports = {getPath, mockClick, mockDrag, _parsePostData, _grayData, _similarImg, randn_bm, K};
 
