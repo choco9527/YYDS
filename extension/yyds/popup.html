@@ -20,10 +20,12 @@
         <van-tab v-for="tab in baseInfo.tabs" :key="tab.name" :title="tab.label" :name="tab.name">
             <article v-if="tab.name === 'game'" class="game">
                 <van-tabs v-model:active="baseInfo.activeGameTab" @change="onGameTabClick">
-                    <van-tab v-for="gameTab in baseInfo.gameTabs" :key="gameTab.name" :title="gameTab.label"
+                    <van-tab v-for="gameTab in gameTabs" :key="gameTab.name" :title="gameTab.label"
                                  :name="gameTab.name">
                         <div class="game-tab-item">
-                            <van-button v-if="gameTab.data.status !== -1" @click="onGameClick(gameTab,gameTab.data)">{{gameTab.data.status === 1 ? '停止' :'开始'}}{{ gameTab.label }}</van-button>
+                            <van-button v-if="gameTab.data.status !== -1" @click="onGameClick(gameTab,gameTab.data)">
+                                {{gameTab.data.status === 1 ? '停止' :'开始'}}{{ gameTab.label }}
+                            </van-button>
                         </div>
                     </van-tab>
                 </van-tabs>

@@ -18,36 +18,26 @@
                             case 'listenClick':
                                 console.log('开始监听点击')
                                 const body = $('body')
-                                body.mousedown(e => {
-                                    dragging = true
-                                })
-                                body.mousemove(e => {
-                                    if (dragging) {
+                                body.mousedown(e => dragging = true)
+                                    .mousemove(e => dragging && $e.shrinkPoint(e.clientX, e.clientY))
+                                    .mouseup(e => {
                                         $e.shrinkPoint(e.clientX, e.clientY)
-                                    }
-                                })
-                                body.mouseup(e => {
-                                    dragging = false
-                                })
-                                // body.click(e => {
-                                //     const now = Date.now()
-                                //     console.log('click_body', e, now - time);
-                                //     time = now
-                                //     $e.shrinkPoint(e.clientX, e.clientY)
-                                // })
+                                        dragging = false
+                                    })
                                 break
                             case 'drawVideo':
                                 console.log('draw video 2 canvas')
                                 $canvas.createNewCanvas()
                                 break
                             case 'videoTest':
-                                await $e.emit({cmd, postType: 'game'})
+                                const resData = await $e.emit({cmd, postType: 'game'})
+                                if ($gameStatusArr.includes(resData.cmd)) port.postMessage(resData)
                                 break
                         }
                         return
                     } else if (type === 'game') {
                         const resData = await $e.emit({cmd, postType: 'game'})
-                        if ($gameStatusArr.includes(resData.code)) port.postMessage(resData)
+                        if ($gameStatusArr.includes(resData.cmd)) port.postMessage(resData)
                         return
                     }
                 }

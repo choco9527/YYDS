@@ -103,7 +103,7 @@ const {pageMap} = require('./js/map')
             for (let i = 0; i < playingList.length; i++) {
                 const item = playingList[i]
                 if (item.gameType === gameType) {
-                    await response2page(req, {code: 'stop', msg: '停止'})
+                    await response2page(req, {cmd: 'stop', msg: '停止'})
                     clearInterval(item.intervalId) // 关闭监听
                     playingList.splice(i, 1)
                     return
@@ -111,20 +111,22 @@ const {pageMap} = require('./js/map')
             }
 
             if (playingList.length > 0) {
-                await response2page(req, {code: 'elseGame', msg: '请先停止其他正在执行的操作'})
+                await response2page(req, {cmd: 'elseGame', msg: '请先停止其他正在执行的操作'})
                 return
             }
 
             if (!pageMap[gameType]) {
-                await response2page(req, {code: 'noGame', msg: '暂不支持该类型操作'})
+                await response2page(req, {cmd: 'noGame', msg: '暂不支持该类型操作'})
                 return
             }
-            await response2page(req, {code: 'start', msg: '开始'})
+
+            await response2page(req, {cmd: 'start', msg: '开始'})
+
             item.intervalId = setInterval(async () => {
                 console.time()
                 const videoData = await _getVideoData()
                 for (let i = 0; i < pageMap[gameType].length; i++) {
-                    if (i === 0) console.log('————')
+                    if (i === 0) console.log('———————    ———————')
                     const pItem = pageMap[gameType][i]
                     let compareData = []
                     if (!!pItem.img.data) {
@@ -150,8 +152,8 @@ const {pageMap} = require('./js/map')
                             await mockClick({page, x, y, clickTimes: pItem.clickTimes, r: pItem.r})
                         } else if (pItem.dragMap) {
                             let index = Math.floor((randn_bm() * pItem.dragMap.length))
-                            const {x1, y1, x2, y2} = pItem.dragMap[index]
-                            await mockDrag({page, x1, y1, x2, y2})
+                            const {x1, y1, x2, y2,duration} = pItem.dragMap[index]
+                            await mockDrag({page, x1, y1, x2, y2,duration})
                         }
                     }
                 }

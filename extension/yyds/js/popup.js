@@ -1,5 +1,5 @@
-const {ref, reactive} = Vue
-// const bg = chrome.extension.getBackgroundPage();
+const {computed, reactive} = Vue
+const bg = chrome.extension.getBackgroundPage();
 
 const App = {
     setup(props) {
@@ -11,11 +11,6 @@ const App = {
                 {label: 'Game', name: 'game'}, {label: 'Setting', name: 'setting'}
             ],
             activeGameTab: 'yuhun',
-            gameTabs: [
-                {label: '御魂', name: 'yuhun', cmd: 'yuhun', data: {status: 0}},
-                {label: '痴', name: 'chi', cmd: 'chi', data: {status: 0}},
-                {label: '御灵', name: 'yuling', cmd: 'yuling', data: {status: 0}}
-            ],
             settingCards: [
                 {label: '点击监听', name: 'listenClick', cmd: 'listenClick'},
                 {label: '抓取视频', name: 'drawVideo', cmd: 'drawVideo'},
@@ -23,6 +18,18 @@ const App = {
             ]
         });
         Object.assign(retObj, {baseInfo});
+
+        let playingList = reactive(bg.$playingList)
+        const gameTabs = computed(() => [
+            {label: '御魂', name: 'yuhun', cmd: 'yuhun', data: {status: 0}},
+            {label: '痴', name: 'chi', cmd: 'chi', data: {status: 0}},
+            {label: '御灵', name: 'yuling', cmd: 'yuling', data: {status: 0}}
+        ].map(tab => {
+            tab.data.status = playingList.map(item => item.gameType).includes(tab.name) ? 1 : 0
+            return tab
+        }))
+
+        Object.assign(retObj, {gameTabs});
 
         const onPageTabClick = () => {
             const tabName = baseInfo.activePageTab
@@ -32,10 +39,20 @@ const App = {
         }
         const onGameClick = ({cmd, label, data}) => {
             $sendMessageToContentScript({cmd, type: 'game'}, res => {
-                if ($gameStatusArr.includes(res.code)) {
-                    // data.status = res.code === 'start' ? 1 : res.code ? 0 : -1
-                    // console.log(bg.$playingList);
+                if ($gameStatusArr.includes(res.cmd)) {
                     $notify(label + '操作', res.msg)
+                    if (res.cmd === 'start') {
+                        bg.$playingList.push({gameType: cmd})
+                        playingList.push({gameType: cmd})
+                    }
+                    if (res.cmd === 'stop') {
+                        for (let i = 0; i < bg.$playingList.length; i++) {
+                            if (bg.$playingList[i].gameType === cmd) {
+                                bg.$playingList.splice(i, 1)
+                                playingList.splice(i, 1)
+                            }
+                        }
+                    }
                 }
             });
         }

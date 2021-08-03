@@ -1,2 +1,1 @@
-window.$gameStatusArr = ['fail', 'noGame', 'elseGame', 'stop', 'start']
-window.$playingList = []
+window.$gameStatusArr = Object.freeze(['fail', 'noGame', 'elseGame', 'stop', 'start'])
