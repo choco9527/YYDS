@@ -3,6 +3,8 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 puppeteer.use(StealthPlugin())
 
 const {createCanvas, loadImage} = require('canvas')
+const getPixels = require("get-pixels")
+
 const dotenv = require("dotenv")
 dotenv.config()
 const {getPath, mockClick, mockDrag, _parsePostData, _grayData, _similarImg, randn_bm, K} = require('./js/tools');
@@ -152,8 +154,8 @@ const {pageMap} = require('./js/map')
                             await mockClick({page, x, y, clickTimes: pItem.clickTimes, r: pItem.r})
                         } else if (pItem.dragMap) {
                             let index = Math.floor((randn_bm() * pItem.dragMap.length))
-                            const {x1, y1, x2, y2,duration} = pItem.dragMap[index]
-                            await mockDrag({page, x1, y1, x2, y2,duration})
+                            const {x1, y1, x2, y2, duration} = pItem.dragMap[index]
+                            await mockDrag({page, x1, y1, x2, y2, duration})
                         }
                     }
                 }
@@ -177,14 +179,21 @@ const {pageMap} = require('./js/map')
 
         async function _getImageData(path = '', scale = false) {
             if (!path) throw new Error('no path')
-            const img = await loadImage(getPath(path))
-            const width = img.width / K, height = img.height / K
-            const canvas = createCanvas(width, height)
-            const ctx = canvas.getContext('2d')
-            ctx.imageSmoothingEnabled = false // 锐化
-            ctx.drawImage(img, 0, 0, width, height)
-            let frame = ctx.getImageData(0, 0, width, height);
-            return _grayData(frame.data)
+            return new Promise(resolve => {
+                getPixels(getPath(path), (err, pixels) => {
+                    if (err) throw new Error('Bad image path')
+                    resolve(_grayData(pixels.data))
+                })
+            })
+
+            // const img = await loadImage(getPath(path))
+            // const width = img.width / K, height = img.height / K
+            // const canvas = createCanvas(width, height)
+            // const ctx = canvas.getContext('2d')
+            // ctx.imageSmoothingEnabled = false // 锐化
+            // ctx.drawImage(img, 0, 0, width, height)
+            // let frame = ctx.getImageData(0, 0, width, height);
+            // return _grayData(frame.data)
         }
 
         await listenIt() // 监听页面
