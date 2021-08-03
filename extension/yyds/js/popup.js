@@ -1,5 +1,5 @@
 const {computed, reactive} = Vue
-const bg = chrome.extension.getBackgroundPage();
+const bg = chrome.extension ? chrome.extension.getBackgroundPage() : {$playingList: []}
 
 const App = {
     setup(props) {

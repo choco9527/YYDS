@@ -16,14 +16,14 @@
 </head>
 <body>
 <main id="app" class="yyds-main">
-    <van-tabs v-model:active="baseInfo.activePageTab"  @change="onPageTabClick">
+    <van-tabs color="#333" type="card" animated v-model:active="baseInfo.activePageTab"  @change="onPageTabClick">
         <van-tab v-for="tab in baseInfo.tabs" :key="tab.name" :title="tab.label" :name="tab.name">
             <article v-if="tab.name === 'game'" class="game">
-                <van-tabs v-model:active="baseInfo.activeGameTab" @change="onGameTabClick">
+                <van-tabs color="#999" animated v-model:active="baseInfo.activeGameTab" @change="onGameTabClick">
                     <van-tab v-for="gameTab in gameTabs" :key="gameTab.name" :title="gameTab.label"
                                  :name="gameTab.name">
                         <div class="game-tab-item">
-                            <van-button v-if="gameTab.data.status !== -1" @click="onGameClick(gameTab,gameTab.data)">
+                            <van-button size="small" v-if="gameTab.data.status !== -1" @click="onGameClick(gameTab,gameTab.data)">
                                 {{gameTab.data.status === 1 ? '停止' :'开始'}}{{ gameTab.label }}
                             </van-button>
                         </div>
@@ -33,9 +33,9 @@
             <article v-if="tab.name === 'setting'" class="setting">
                 <van-row :gutter="12">
                     <van-col class="outer" :span="8" v-for="card in baseInfo.settingCards" :key="card.name">
-                        <div class="inner" @click="onSettingClick(card.cmd,card.label)">
+                        <van-button size="small"  @click="onSettingClick(card.cmd,card.label)">
                             {{card.label}}
-                        </div>
+                        </van-button>
                     </van-col>
                 </van-row>
             </article>
