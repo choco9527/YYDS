@@ -3,23 +3,14 @@ const pageMap = {
         {
             name: '测试页',
             path: 'img/test/testyoumi.png', // 比对的图片路径
-            position: {x1: 290, y1: 176, x2: 680, y2: 300}, // 比对图片区域（无则比对整张图）
-            clickMap: [{x: 2, y: 2}], // 安全点击位置
+            position: {x1: 300, y1: 195, x2: 670, y2: 250}, // 比对图片区域（无则比对整张图）
+            // clickMap: [{x: 2, y: 2}], // 安全点击位置
+            dragMap: [{x1: 50, y1: 100, x2: 150, y2: 100}], // 拖拽行为
             clickTimes: 1, // 点击次数
             simi: 0.8, // 相似度阈值
             r: 30, // 点击半径
             img: {data: null} // 图片data缓存
         },
-        {
-            name: '测试页2',
-            path: 'img/test/testyoumi.png', // 比对的图片路径
-            position: {x1: 290, y1: 176, x2: 680, y2: 300}, // 比对图片区域（无则比对整张图）
-            clickMap: [{x: 2, y: 2}], // 安全点击位置
-            clickTimes: 1, // 点击次数
-            simi: 0.8, // 相似度阈值
-            r: 30, // 点击半径
-            img: {data: null} // 图片data缓存
-        }
     ],
     'yuhun': [
         {
@@ -107,19 +98,21 @@ const pageMap = {
 }
 
 const globalMap = { // 公用图
-    'fighting':{
+    'fighting': [{
         name: '战斗中',
         path: 'img/yys/pages/global/fighting.png',
         position: {x1: 0, y1: 530, x2: 150, y2: 670}, // 比对图片区域（无则比对整张图）
-        clickMap: [{x: 100, y: 100},{x: 100, y: 200},{x: 100, y: 300},],
+        clickMap: [{x: 100, y: 100}, {x: 100, y: 200}, {x: 100, y: 300},],
         clickTimes: 1,
         simi: 0.6,
         r: 30,
         img: {data: null}
-    }
+    }]
 }
 
-pageMap['yuhun'].push(globalMap['fighting'])
+pageMap['yuhun'].push(...globalMap['fighting'])
+pageMap['yuling'].push(...globalMap['fighting'])
+pageMap['chi'].push(...globalMap['fighting'])
 
 function deepFreeze(obj) {
     const propNames = Object.getOwnPropertyNames(obj);

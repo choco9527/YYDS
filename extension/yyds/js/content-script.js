@@ -5,7 +5,8 @@
         get: () => false,
     });
     let time = 0;
-    (function listenPage() { // 接受popup消息
+    let dragging = false
+    ;(function listenPage() { // 接受popup消息
         chrome.runtime.onConnect.addListener(async (port) => {
             if (port.name !== 'yyds-popup-connect') return
             port.onMessage.addListener(async res => {
@@ -16,12 +17,24 @@
                         switch (cmd) {
                             case 'listenClick':
                                 console.log('开始监听点击')
-                                $('body').click(e => {
-                                    const now = Date.now()
-                                    console.log('click_body', e, now - time);
-                                    time = now
-                                    $e.shrinkPoint(e.clientX, e.clientY)
+                                const body = $('body')
+                                body.mousedown(e => {
+                                    dragging = true
                                 })
+                                body.mousemove(e => {
+                                    if (dragging) {
+                                        $e.shrinkPoint(e.clientX, e.clientY)
+                                    }
+                                })
+                                body.mouseup(e => {
+                                    dragging = false
+                                })
+                                // body.click(e => {
+                                //     const now = Date.now()
+                                //     console.log('click_body', e, now - time);
+                                //     time = now
+                                //     $e.shrinkPoint(e.clientX, e.clientY)
+                                // })
                                 break
                             case 'drawVideo':
                                 console.log('draw video 2 canvas')
@@ -41,19 +54,19 @@
                 port.postMessage('fail')
             });
         });
-    })();
+    })()
 
     // draw video 2 canvas auto
-    (function drawVideoAuto() {
+    ;(function drawVideoAuto() {
         console.log('listening video 2 canvas auto')
         setInterval(() => {
             $canvas.fresh()
             $canvas.drawVideoImg()
         }, 600)
-    })();
+    })()
 
     // 清理页面（关闭一些弹窗）
-    (function clearPage() {
+    ;(function clearPage() {
         const timeout = 1000, closeSlide = setInterval(() => {
             $('.slide-close').trigger('click')
             $('h2.f14').each(function (i, ele) {

@@ -31,10 +31,16 @@ function getCircleArea(r = 10) { // get area by xy for circle
     return {cX, cY}
 }
 
-async function mockClick({page = null, x = 0, y = 0, clickTimes = 1, r = 10}) { // a new click loop
-    console.log('a new click loop')
-    console.time()
+async function mockDrag({page = null, x1 = 0, y1 = 0, x2 = 0, y2 = 0}) { // a new drag
+    if (!page) throw new Error('no page')
+    await page.mouse.move(x1, y1)
+    await page.mouse.down()
+    await page.mouse.move(x2, y2, {steps: 50})
+    await page.mouse.up()
+}
 
+async function mockClick({page = null, x = 0, y = 0, clickTimes = 1, r = 10}) { // a new click loop
+    if (!page) throw new Error('no page')
     const loopClick = async (loopClickTimes = 1) => {
         // create loopClick
         const {cX, cY} = getCircleArea(r)
@@ -59,8 +65,7 @@ async function mockClick({page = null, x = 0, y = 0, clickTimes = 1, r = 10}) { 
         await page.mouse.click(x + cX, y + cY, {delay: randomNumber(0, 10)})
     }
 
-    await loopClick(clickTimes)
-    console.timeEnd() // 一轮点击时长 = 次数：loopClickTimes × (频率：frequency + 点击延时：delay)
+    await loopClick(clickTimes) // 一轮点击时长 = 次数：loopClickTimes × (频率：frequency + 点击延时：delay)
     return Promise.resolve('success')
 }
 
@@ -166,5 +171,5 @@ function _compareImg(dataBig, data) { // 比较算法 得出是否包含、所�
     }
 }
 
-module.exports = {getPath, mockClick, _parsePostData, _grayData, _similarImg, randn_bm, K};
+module.exports = {getPath, mockClick,mockDrag, _parsePostData, _grayData, _similarImg, randn_bm, K};
 

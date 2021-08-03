@@ -5,9 +5,9 @@ puppeteer.use(StealthPlugin())
 const {createCanvas, loadImage} = require('canvas')
 const dotenv = require("dotenv")
 dotenv.config()
-const {getPath, mockClick, _parsePostData, _grayData, _similarImg, randn_bm, K} = require('./js/tools');
-const {pageMap} = require('./js/map');
-(async () => {
+const {getPath, mockClick, mockDrag, _parsePostData, _grayData, _similarImg, randn_bm, K} = require('./js/tools');
+const {pageMap} = require('./js/map')
+;(async () => {
     try {
         const {browser} = await openIt() // 打开页面
         let pages = await browser.pages()
@@ -34,7 +34,7 @@ const {pageMap} = require('./js/map');
                 'https://aso.youmi.net',
                 'https://bot.sannysoft.com'
             ]
-            const url = urls[1]
+            const url = urls[3]
             await page1.goto(url);
             page1.on('request', async req => {
                 const postData = _parsePostData(req)
@@ -54,7 +54,7 @@ const {pageMap} = require('./js/map');
             for (let i = 0; i < pages.length; i++) {
                 const p = pages[i]
                 if (p.url() === 'about:blank') await p.close()
-                if (p.url().includes('cg.163.com/run.html') || p.url().includes('youmi')) {
+                if (p.url().includes('cg.163.com/run.html') || p.url().includes('youmi') || p.url().includes('baidu')) {
                     page = p
                 }
             }
@@ -144,9 +144,15 @@ const {pageMap} = require('./js/map');
                     console.log(compareRes.simi);
                     if (compareRes.simi > pItem.simi) {
                         console.log(pItem.name);
-                        let index = Math.floor((randn_bm() * pItem.clickMap.length))
-                        const {x, y} = pItem.clickMap[index]
-                        await mockClick({page, x, y, clickTimes: pItem.clickTimes, r: pItem.r})
+                        if (pItem.clickMap) {
+                            let index = Math.floor((randn_bm() * pItem.clickMap.length))
+                            const {x, y} = pItem.clickMap[index]
+                            await mockClick({page, x, y, clickTimes: pItem.clickTimes, r: pItem.r})
+                        } else if (pItem.dragMap) {
+                            let index = Math.floor((randn_bm() * pItem.dragMap.length))
+                            const {x1, y1, x2, y2} = pItem.dragMap[index]
+                            await mockDrag({page, x1, y1, x2, y2})
+                        }
                     }
                 }
                 console.timeEnd()
