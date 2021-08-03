@@ -36,14 +36,15 @@ function randomNumber_mb(min = 0, max = 0) { // 服从正态分布的随机取�
 }
 
 
-async function mockDrag({page = null, x1 = 0, y1 = 0, x2 = 0, y2 = 0, duration = 1000, r = 50}) { // a new drag
+async function mockDrag({page = null, x1 = 0, y1 = 0, x2 = 0, y2 = 0, duration = 600, r = 20}) { // a new drag
     if (!page) throw new Error('no page')
-    const {cX, cY} = getCircleArea(r)
-    const {cX: cX2, cY: cY2} = getCircleArea(r)
+    const {cX, cY} = getCircleArea(r) // 起点漂移
     x1 = x1 + cX
-    y1 = y1 + cY // 起点漂移
+    y1 = y1 + cY
+    const {cX: cX2, cY: cY2} = getCircleArea(r) // 终点漂移
     x2 = x2 + cX2
-    y2 = y2 + cY2 // 终点漂移
+    y2 = y2 + cY2
+
     const dx = x2 - x1
     const dy = y2 - y1
     let rate = 0
@@ -52,12 +53,12 @@ async function mockDrag({page = null, x1 = 0, y1 = 0, x2 = 0, y2 = 0, duration =
     const interId = setInterval(async () => {
         const r = easeOutCirc(rate)
         await page.mouse.move(x1 + dx * r, y1 + dy * r)
-        rate += 30 / 1000
+        rate += 30 / duration
     }, 30)
     setTimeout(async () => {
         clearInterval(interId)
         await page.mouse.up()
-    }, duration)
+    }, duration + 1)
 }
 
 async function mockClick({page = null, x = 0, y = 0, clickTimes = 1, r = 10}) { // a new click loop
