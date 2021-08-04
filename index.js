@@ -4,6 +4,9 @@ puppeteer.use(StealthPlugin())
 
 const {createCanvas, loadImage} = require('canvas')
 const getPixels = require("get-pixels")
+const images = require("images");
+const sharp = require('sharp');
+const fs = require('fs')
 
 const dotenv = require("dotenv")
 dotenv.config()
@@ -37,7 +40,7 @@ const {pageMap} = require('./js/map')
                 'https://aso.youmi.net',
                 'https://bot.sannysoft.com'
             ]
-            const url = urls[2]
+            const url = urls[3]
             await page1.goto(url);
             page1.on('request', async req => {
                 const postData = _parsePostData(req)
@@ -56,7 +59,7 @@ const {pageMap} = require('./js/map')
             console.log(page.url());
             await page.setRequestInterception(true) // 请求拦截
             const data = await _getImageData('img/test/testyoumi.png')
-            await response2page(req, data)
+            // console.log(data);
         }
 
         async function getPage() { // get page
@@ -98,7 +101,7 @@ const {pageMap} = require('./js/map')
 
         const playingList = []
 
-        async function response2page(req, data = null) {
+        async function response2page(req, data = {}) {
             await req.respond({
                 status: 200,
                 headers: {'Access-Control-Allow-Origin': '*',},
@@ -189,35 +192,23 @@ const {pageMap} = require('./js/map')
 
         async function _getImageData(path = '', scale = false) {
             if (!path) throw new Error('no path')
-            return new Promise(resolve => {
-                getPixels(getPath(path), (err, pixels) => {
-                    if (err) throw new Error('Bad image path')
-                    // const pageRes = page.evaluate(async (pixelsData) => {
-                    //     console.log(1);
-                    //     console.time()
-                    //     const canvasEle = document.getElementById('yyds-canvas')
-                    //     const ctx = canvasEle.getContext('2d')
-                    //     ctx.imageSmoothingEnabled = false // 锐化
-                    //     const imageData = new ImageData(new Uint8ClampedArray(pixelsData), 960, 540);
-                    //     ctx.putImageData(imageData, 0, 0);
-                    //     let frame = ctx.getImageData(0, 0, canvasEle.width, canvasEle.height);
-                    //     const data = Array.from(frame.data)
-                    //     const arr = await window._grayData(data)
-                    //     console.timeEnd()
-                    //     return Promise.resolve(arr)
-                    // }, Array.from(pixels.data));
-                    resolve(Array.from(pixels.data))
-                })
-            })
 
-            // const img = await loadImage(getPath(path))
-            // const width = img.width / K, height = img.height / K
-            // const canvas = createCanvas(width, height)
-            // const ctx = canvas.getContext('2d')
-            // ctx.imageSmoothingEnabled = false // 锐化
-            // ctx.drawImage(img, 0, 0, width, height)
-            // let frame = ctx.getImageData(0, 0, width, height);
-            // return _grayData(frame.data)
+            // const imgBuffer = await sharp(getPath(path)).resize(960 / K).png().toBuffer()
+            // return new Promise(resolve => {
+            //     getPixels(imgBuffer, 'image/png', (err, pixels) => {
+            //         if (err) throw new Error('Bad image path')
+            //         resolve(_grayData(pixels.data))
+            //     })
+            // })
+
+            const img = await loadImage(getPath(path))
+            const width = img.width / K, height = img.height / K
+            const canvas = createCanvas(width, height)
+            const ctx = canvas.getContext('2d')
+            ctx.imageSmoothingEnabled = false // 锐化
+            ctx.drawImage(img, 0, 0, width, height)
+            let frame = ctx.getImageData(0, 0, width, height);
+            return _grayData(frame.data)
         }
 
 

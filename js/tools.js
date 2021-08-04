@@ -102,7 +102,7 @@ function _similarImg(d1, d2, position = undefined, deviation = 5) { // 计算相
         if (data1[i] === data2[i]) {
             count++
         } else if (-deviation < data1[i] - data2[i] && data1[i] - data2[i] < deviation) { // 误差容错
-            count++
+            // count++
         }
     }
 
