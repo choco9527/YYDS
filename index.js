@@ -14,6 +14,7 @@ const {pageMap} = require('./js/map')
         const {browser} = await openIt() // 打开页面
         let pages = await browser.pages()
         let page = null
+        await listenIt() // 监听页面
 
         async function openIt() {
             console.log('正在启动 Chrome')
@@ -36,7 +37,7 @@ const {pageMap} = require('./js/map')
                 'https://aso.youmi.net',
                 'https://bot.sannysoft.com'
             ]
-            const url = urls[3]
+            const url = urls[2]
             await page1.goto(url);
             page1.on('request', async req => {
                 const postData = _parsePostData(req)
@@ -49,6 +50,13 @@ const {pageMap} = require('./js/map')
                 }
             })
             return Promise.resolve({page1, browser})
+        }
+
+        async function test(req) {
+            console.log(page.url());
+            await page.setRequestInterception(true) // 请求拦截
+            const data = await _getImageData('img/test/testyoumi.png')
+            await response2page(req, data)
         }
 
         async function getPage() { // get page
@@ -78,7 +86,9 @@ const {pageMap} = require('./js/map')
 
             page.on('request', async req => {
                 const postData = _parsePostData(req)
-                if (postData && postData.code + '' === '0' && postData.postType === 'game') {
+                if (postData && postData.code + '' === '0' && postData.postType === 'pageHandle' && postData.cmd === 'test') { // 任意测试
+                    await test(req)
+                } else if (postData && postData.code + '' === '0' && postData.postType === 'game') {
                     await playing(postData.cmd, req)
                 } else {
                     await req.continue()
@@ -182,7 +192,21 @@ const {pageMap} = require('./js/map')
             return new Promise(resolve => {
                 getPixels(getPath(path), (err, pixels) => {
                     if (err) throw new Error('Bad image path')
-                    resolve(_grayData(pixels.data))
+                    // const pageRes = page.evaluate(async (pixelsData) => {
+                    //     console.log(1);
+                    //     console.time()
+                    //     const canvasEle = document.getElementById('yyds-canvas')
+                    //     const ctx = canvasEle.getContext('2d')
+                    //     ctx.imageSmoothingEnabled = false // 锐化
+                    //     const imageData = new ImageData(new Uint8ClampedArray(pixelsData), 960, 540);
+                    //     ctx.putImageData(imageData, 0, 0);
+                    //     let frame = ctx.getImageData(0, 0, canvasEle.width, canvasEle.height);
+                    //     const data = Array.from(frame.data)
+                    //     const arr = await window._grayData(data)
+                    //     console.timeEnd()
+                    //     return Promise.resolve(arr)
+                    // }, Array.from(pixels.data));
+                    resolve(Array.from(pixels.data))
                 })
             })
 
@@ -196,7 +220,6 @@ const {pageMap} = require('./js/map')
             // return _grayData(frame.data)
         }
 
-        await listenIt() // 监听页面
 
     } catch (e) {
         console.warn(e);

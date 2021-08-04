@@ -14,7 +14,8 @@ const App = {
             settingCards: [
                 {label: '点击监听', name: 'listenClick', cmd: 'listenClick'},
                 {label: '抓取视频', name: 'drawVideo', cmd: 'drawVideo'},
-                {label: '测试', name: 'videoTest', cmd: 'videoTest'}
+                {label: '测试视频', name: 'videoTest', cmd: 'videoTest'},
+                {label: '测试', name: 'test', cmd: 'test'}
             ]
         });
         Object.assign(retObj, {baseInfo});

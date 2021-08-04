@@ -33,7 +33,7 @@
             <article v-if="tab.name === 'setting'" class="setting">
                 <van-row :gutter="12">
                     <van-col class="outer" :span="8" v-for="card in baseInfo.settingCards" :key="card.name">
-                        <van-button size="small"  @click="onSettingClick(card.cmd,card.label)">
+                        <van-button style="width: 80px" size="small"  @click="onSettingClick(card.cmd,card.label)">
                             {{card.label}}
                         </van-button>
                     </van-col>

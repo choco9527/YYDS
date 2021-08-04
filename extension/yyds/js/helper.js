@@ -12,7 +12,7 @@ class MyEvent {
                 dataType: 'json',
                 data: Object.assign({code: 0, postType: ''}, params),
                 headers: {'custom-info': 'yyds'},
-                timeout: 1500,
+                timeout: 5000,
                 type: 'post',
                 success(res) {
                     console.log('请求成功', res);

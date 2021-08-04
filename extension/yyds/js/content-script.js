@@ -1,9 +1,7 @@
 ﻿;$(document).ready(function () {
     const $e = new MyEvent($);
     const $canvas = new HandleCanvas();
-    Object.defineProperty(navigator, 'webdriver', {
-        get: () => false,
-    });
+
     let time = 0;
     let dragging = false
     ;(function listenPage() { // 接受popup消息
@@ -14,6 +12,7 @@
                 if (code === 'yyds') {
                     if (type === 'setting') {
                         port.postMessage('ok')
+                        let resData
                         switch (cmd) {
                             case 'listenClick':
                                 console.log('开始监听点击')
@@ -30,7 +29,11 @@
                                 $canvas.createNewCanvas()
                                 break
                             case 'videoTest':
-                                const resData = await $e.emit({cmd, postType: 'game'})
+                                resData = await $e.emit({cmd, postType: 'game'})
+                                if ($gameStatusArr.includes(resData.cmd)) port.postMessage(resData)
+                                break
+                            case 'test':
+                                resData = await $e.emit({cmd, postType: 'pageHandle'})
                                 if ($gameStatusArr.includes(resData.cmd)) port.postMessage(resData)
                                 break
                         }
@@ -71,4 +74,5 @@
         }, timeout)
         setTimeout(_ => clearInterval(closeSlide), 10 * timeout)
     })();
+
 })

@@ -7,6 +7,7 @@ window.$notify = (title = '', message = '') => {
         message
     })
 }
+
 window.$sendMessageToContentScript = (message, cb) => {
     Object.assign(message, {code: 'yyds'})
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
