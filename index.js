@@ -1,12 +1,7 @@
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 puppeteer.use(StealthPlugin())
-
-const {createCanvas, loadImage} = require('canvas')
 const getPixels = require("get-pixels")
-const images = require("images");
-const sharp = require('sharp');
-const fs = require('fs')
 
 const dotenv = require("dotenv")
 dotenv.config()
@@ -58,7 +53,7 @@ const {pageMap} = require('./js/map')
         async function test(req) {
             console.log(page.url());
             await page.setRequestInterception(true) // 请求拦截
-            const data = await _getImageData('img/test/testyoumi.png')
+            const data = await _getImageData('img/test/smallyoumi.png')
             // console.log(data);
         }
 
@@ -192,23 +187,12 @@ const {pageMap} = require('./js/map')
 
         async function _getImageData(path = '', scale = false) {
             if (!path) throw new Error('no path')
-
-            // const imgBuffer = await sharp(getPath(path)).resize(960 / K).png().toBuffer()
-            // return new Promise(resolve => {
-            //     getPixels(imgBuffer, 'image/png', (err, pixels) => {
-            //         if (err) throw new Error('Bad image path')
-            //         resolve(_grayData(pixels.data))
-            //     })
-            // })
-
-            const img = await loadImage(getPath(path))
-            const width = img.width / K, height = img.height / K
-            const canvas = createCanvas(width, height)
-            const ctx = canvas.getContext('2d')
-            ctx.imageSmoothingEnabled = false // 锐化
-            ctx.drawImage(img, 0, 0, width, height)
-            let frame = ctx.getImageData(0, 0, width, height);
-            return _grayData(frame.data)
+            return new Promise(resolve => {
+                getPixels(getPath(path), (err, pixels) => {
+                    if (err) throw new Error('Bad image path')
+                    resolve(_grayData(pixels.data))
+                })
+            })
         }
 
 

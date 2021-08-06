@@ -9,42 +9,38 @@
             if (port.name !== 'yyds-popup-connect') return
             port.onMessage.addListener(async res => {
                 const {cmd, code, type} = res
-                if (code === 'yyds') {
-                    if (type === 'setting') {
-                        port.postMessage('ok')
-                        let resData
-                        switch (cmd) {
-                            case 'listenClick':
-                                console.log('开始监听点击')
-                                const body = $('body')
-                                body.mousedown(e => dragging = true)
-                                    .mousemove(e => dragging && $e.shrinkPoint(e.clientX, e.clientY))
-                                    .mouseup(e => {
-                                        $e.shrinkPoint(e.clientX, e.clientY)
-                                        dragging = false
-                                    })
-                                break
-                            case 'drawVideo':
-                                console.log('draw video 2 canvas')
-                                $canvas.createNewCanvas()
-                                break
-                            case 'videoTest':
-                                resData = await $e.emit({cmd, postType: 'game'})
-                                if ($gameStatusArr.includes(resData.cmd)) port.postMessage(resData)
-                                break
-                            case 'test':
-                                resData = await $e.emit({cmd, postType: 'pageHandle'})
-                                if ($gameStatusArr.includes(resData.cmd)) port.postMessage(resData)
-                                break
-                        }
-                        return
-                    } else if (type === 'game') {
-                        const resData = await $e.emit({cmd, postType: 'game'})
-                        if ($gameStatusArr.includes(resData.cmd)) port.postMessage(resData)
-                        return
+                if (code !== 'yyds') return port.postMessage('fail')
+                if (type === 'setting') {
+                    port.postMessage('ok')
+                    let resData
+                    switch (cmd) {
+                        case 'listenClick':
+                            console.log('开始监听点击')
+                            const body = $('body')
+                            body.mousedown(e => dragging = true)
+                                .mousemove(e => dragging && $e.shrinkPoint(e.clientX, e.clientY))
+                                .mouseup(e => {
+                                    $e.shrinkPoint(e.clientX, e.clientY)
+                                    dragging = false
+                                })
+                            break
+                        case 'drawVideo':
+                            console.log('draw video 2 canvas')
+                            $canvas.toggleCanvasToPage()
+                            break
+                        case 'videoTest':
+                            resData = await $e.emit({cmd, postType: 'game'})
+                            if ($gameStatusArr.includes(resData.cmd)) port.postMessage(resData)
+                            break
+                        case 'test':
+                            resData = await $e.emit({cmd, postType: 'pageHandle'})
+                            if ($gameStatusArr.includes(resData.cmd)) port.postMessage(resData)
+                            break
                     }
+                } else if (type === 'game') {
+                    const resData = await $e.emit({cmd, postType: 'game'})
+                    if ($gameStatusArr.includes(resData.cmd)) port.postMessage(resData)
                 }
-                port.postMessage('fail')
             });
         });
     })()

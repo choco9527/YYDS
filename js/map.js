@@ -2,7 +2,7 @@ const pageMap = {
     'videoTest': [
         {
             name: '测试页',
-            path: 'img/test/testyoumi.png', // 比对的图片路径
+            path: 'img/test/smallyoumi.png', // 比对的图片路径
             position: {x1: 300, y1: 195, x2: 670, y2: 250}, // 比对图片区域（无则比对整张图）
             // clickMap: [{x: 2, y: 2}], // 安全点击位置
             dragMap: [{x1: 10, y1: 100, x2: 250, y2: 200, duration: 200},

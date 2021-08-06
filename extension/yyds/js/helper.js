@@ -63,6 +63,7 @@ class HandleCanvas {
         this.videoEle = null
         this.viewWidth = 960
         this.viewHeight = 540
+        this.hidden = true
         this.initCanvas()
     }
 
@@ -77,6 +78,26 @@ class HandleCanvas {
         canvasEle.height = this.viewHeight / K
         document.body.appendChild(canvasEle)
         this.canvasEle = canvasEle
+    }
+
+    toggleCanvasToPage() { // 将canvas显示/隐藏
+       if (this.canvasEle) {
+           if (this.hidden) {
+               this.canvasEle.style.display = 'block'
+               this.canvasEle.style.zIndex = '100'
+               this.canvasEle.style.opacity = '1'
+               this.canvasEle.style.position = 'fixed'
+               this.canvasEle.style.top = '0'
+               this.canvasEle.style.left = '0'
+               this.hidden = false
+           }else{
+               this.canvasEle.style.display = 'none'
+               this.canvasEle.style.zIndex = '-100'
+               this.canvasEle.style.opacity = '0'
+           }
+       }else{
+           this.initCanvas()
+       }
     }
 
     createNewCanvas() { // 画一幅原始尺寸的画
