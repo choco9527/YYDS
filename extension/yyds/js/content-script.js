@@ -59,7 +59,7 @@
         const timeout = 1000, closeSlide = setInterval(() => {
             $('.slide-close').trigger('click')
             $('h2.f14').each(function (i, ele) {
-                if (ele.innerText === '阴阳师（ios+安卓）') {
+                if (ele.innerText === '阴阳师(ios服)') {
                     const playEl = $(this).parent().next()
                     playEl.trigger('click')
                     $e.emit({postType: 'pageHandle', cmd: 'inputPhone'})

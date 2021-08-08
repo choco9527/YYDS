@@ -96,13 +96,13 @@ function _similarImg(d1, d2, position = undefined, deviation = 5) { // 计算相
     const data2 = position ? _getAreaData(d2, position) : d2
     if (!data1 || !data2) throw new Error('no img')
     const len1 = data1.length, len2 = data2.length
-    // console.log(len1, len2);
     let count = 0
+
     for (let i = 0; i < len1; i++) {
         if (data1[i] === data2[i]) {
             count++
         } else if (-deviation < data1[i] - data2[i] && data1[i] - data2[i] < deviation) { // 误差容错
-            // count++
+            count++
         }
     }
 

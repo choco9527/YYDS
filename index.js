@@ -19,7 +19,7 @@ const {pageMap} = require('./js/map')
             const extendUrl = 'extension/yyds'
             const options = {
                 headless: false,
-                args: [`--disable-extensions-except=${getPath(extendUrl)}`, "--window-position=0,0", `--window-size=960,700`],
+                args: [`--disable-extensions-except=${getPath(extendUrl)}`, "--window-position=0,0", `--window-size=980,650`],
                 defaultViewport: {width: 960, height: 540},
                 // devtools: true,
                 executablePath: process.env.CHROME_PATH,
@@ -35,7 +35,7 @@ const {pageMap} = require('./js/map')
                 'https://aso.youmi.net',
                 'https://bot.sannysoft.com'
             ]
-            const url = urls[3]
+            const url = urls[1]
             await page1.goto(url);
             page1.on('request', async req => {
                 const postData = _parsePostData(req)
@@ -181,6 +181,7 @@ const {pageMap} = require('./js/map')
                 let frame = ctx.getImageData(0, 0, canvasEle.width, canvasEle.height);
                 const data = Array.from(frame.data)
                 const arr = await window._grayData(data)
+                // return Promise.resolve(data)
                 return Promise.resolve(arr)
             });
         }
@@ -190,7 +191,8 @@ const {pageMap} = require('./js/map')
             return new Promise(resolve => {
                 getPixels(getPath(path), (err, pixels) => {
                     if (err) throw new Error('Bad image path')
-                    resolve(_grayData(pixels.data))
+                    // resolve(Array.from(pixels.data))
+                    resolve(_grayData(Array.from(pixels.data)))
                 })
             })
         }
