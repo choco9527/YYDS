@@ -124,7 +124,7 @@ const globalMap = { // 公用图
         clickMap: [{x: 135, y: 385}, {x: 825, y: 400}, {x: 780, y: 175}, {x: 120, y: 170}, {x: 400, y: 160}],
         position: {x1: 240, y1: 80, x2: 740, y2: 200},
         clickTimes: 1,
-        simi: 0.5,
+        simi: 0.45,
         r: 20,
         img: {data: null}
     }],
