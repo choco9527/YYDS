@@ -106,7 +106,7 @@ const globalMap = { // 公用图
         path: 'img/yys/pages/global/fighting.png',
         position: {x1: 0, y1: 530, x2: 150, y2: 670},
         clickTimes: 1,
-        simi: 0.6,
+        simi: 0.2,
         r: 30,
         img: {data: null}
     },{
